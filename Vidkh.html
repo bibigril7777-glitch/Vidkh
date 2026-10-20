@@ -1,0 +1,1516 @@
+<!DOCTYPE html>
+<html lang="km">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>VidKH</title>
+<style>
+:root{--bg:#fff;--bg2:#f2f4f8;--tx:#10131a;--mu:#5c6577;--ln:#e1e5ec;--ac:#2f6bff;--acx:#fff;--hh:56px;--bn:0px}
+@media (prefers-color-scheme:dark){:root:not([data-theme=light]){--bg:#0f1218;--bg2:#1b2029;--tx:#eef1f6;--mu:#9aa4b6;--ln:#2a3140;--ac:#6b93ff;--acx:#0f1218}}
+:root[data-theme=dark]{--bg:#0f1218;--bg2:#1b2029;--tx:#eef1f6;--mu:#9aa4b6;--ln:#2a3140;--ac:#6b93ff;--acx:#0f1218}
+*{box-sizing:border-box;margin:0}
+html,body{height:100%}
+body{background:var(--bg);color:var(--tx);font:15px/1.5 "Noto Sans Khmer","Khmer OS",system-ui,sans-serif;padding-top:env(safe-area-inset-top)}
+button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
+button:focus-visible,input:focus-visible,select:focus-visible{outline:2px solid var(--ac);outline-offset:2px}
+header{position:sticky;top:env(safe-area-inset-top,0);z-index:5;height:var(--hh);background:var(--bg);border-bottom:1px solid var(--ln);display:flex;gap:8px;align-items:center;padding:0 12px}
+.logo{font-weight:800;font-size:20px;display:flex;align-items:center;gap:6px;white-space:nowrap}
+.logo i{width:30px;height:22px;border-radius:7px;background:var(--ac);display:inline-grid;place-items:center}
+.logo i:after{content:"";border-left:8px solid var(--acx);border-top:5px solid transparent;border-bottom:5px solid transparent;margin-left:2px}
+.search{flex:1;max-width:520px;margin:0 auto;display:flex}
+.search input{flex:1;min-width:0;background:var(--bg2);color:var(--tx);border:1px solid var(--ln);border-radius:20px;padding:7px 16px;font:inherit}
+.ib{width:38px;height:38px;border-radius:50%;display:grid;place-items:center;font-size:18px;background:var(--bg2);flex:none;overflow:hidden}
+.ib img{width:100%;height:100%;object-fit:cover}
+.layout{display:flex}
+nav{width:190px;flex:none;padding:10px 8px;position:sticky;top:calc(var(--hh) + env(safe-area-inset-top,0px));height:calc(100vh - var(--hh));border-right:1px solid var(--ln)}
+nav button{display:flex;gap:12px;width:100%;padding:9px 12px;border-radius:10px;text-align:left}
+nav button:hover,nav button.on{background:var(--bg2)}
+nav button.on{font-weight:700;color:var(--ac)}
+main{flex:1;min-width:0;padding:14px}
+.chips{display:flex;gap:8px;overflow-x:auto;padding-bottom:12px}
+.chips button{padding:5px 14px;border-radius:8px;background:var(--bg2);white-space:nowrap}
+.chips button.on{background:var(--tx);color:var(--bg)}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:18px 12px}
+.grid.p{grid-template-columns:repeat(auto-fill,minmax(150px,1fr))}
+.grid.ph{grid-template-columns:repeat(auto-fill,minmax(130px,1fr));gap:6px}
+.card{cursor:pointer;text-align:left;display:block;width:100%}
+.th{position:relative;aspect-ratio:16/9;border-radius:12px;overflow:hidden;background:var(--bg2)}
+.th.po{aspect-ratio:2/3}
+.th video,.th img{width:100%;height:100%;object-fit:cover;pointer-events:none;display:block}
+.dur{position:absolute;right:6px;bottom:6px;background:#000c;color:#fff;font-size:12px;padding:1px 6px;border-radius:5px}
+.meta{display:flex;gap:10px;margin-top:9px}
+.av{width:36px;height:36px;border-radius:50%;flex:none;display:grid;place-items:center;color:#fff;font-weight:700;object-fit:cover}
+.av.big{width:84px;height:84px;font-size:32px}
+.t{font-weight:600;line-height:1.35;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.s{color:var(--mu);font-size:13px}
+.watch{display:grid;grid-template-columns:minmax(0,1fr) 360px;gap:20px}
+.player{width:100%;aspect-ratio:16/9;background:#000;border-radius:12px;display:block}
+.watch h1{font-size:19px;margin:12px 0 8px}
+.row{display:flex;flex-wrap:wrap;gap:10px;align-items:center;justify-content:space-between}
+.act{display:flex;gap:8px;flex-wrap:wrap}
+.pill{padding:7px 14px;border-radius:20px;background:var(--bg2)}
+.pill.on{background:var(--ac);color:var(--acx)}
+.sub{background:var(--tx);color:var(--bg);padding:7px 16px;border-radius:20px;font-weight:600;margin-left:6px}
+.sub.on{background:var(--bg2);color:var(--tx)}
+.desc{background:var(--bg2);border-radius:12px;padding:12px;margin:14px 0}
+.cm{display:flex;gap:10px;margin:14px 0;align-items:center}
+.cm.top{align-items:flex-start}
+.cmi{display:flex;gap:8px;margin:12px 0}
+.cmi input{flex:1;background:none;color:var(--tx);border:0;border-bottom:1px solid var(--ln);padding:6px 2px;font:inherit}
+.rel{display:flex;gap:10px;margin-bottom:12px;cursor:pointer;text-align:left;width:100%}
+.rel .th{width:160px;flex:none}
+.empty{padding:60px 10px;text-align:center;color:var(--mu)}
+.hero{display:grid;grid-template-columns:1.3fr 1fr;gap:18px;align-items:center;margin-bottom:22px}
+.hero h2{font-size:26px;margin-bottom:6px}
+.hero p{color:var(--mu);margin-bottom:12px}
+.reels{height:calc(100dvh - var(--hh) - var(--bn) - env(safe-area-inset-top,0px));max-width:430px;margin:0 auto;overflow-y:auto;scroll-snap-type:y mandatory;border-radius:14px;background:#000}
+.reel{height:100%;scroll-snap-align:start;scroll-snap-stop:always;position:relative}
+.reel video{width:100%;height:100%;object-fit:contain;display:block}
+.ra{position:absolute;right:8px;bottom:70px;display:flex;flex-direction:column;gap:12px;align-items:center}
+.ra button{width:46px;height:46px;border-radius:50%;background:#0007;color:#fff;font-size:20px;display:grid;place-items:center;position:relative}
+.ra button.on{color:#ff5470}
+.ra small{position:absolute;bottom:-14px;font-size:11px}
+.rc{position:absolute;left:12px;right:70px;bottom:14px;color:#fff;text-shadow:0 1px 4px #000}
+.chead{display:flex;gap:16px;align-items:center;margin-bottom:14px;flex-wrap:wrap}
+.chead h2{font-size:22px}
+.tabs{display:flex;gap:8px;overflow-x:auto;margin:6px 0 14px}
+.ph-t{position:relative;aspect-ratio:1;border-radius:6px;overflow:hidden;cursor:pointer;display:block;width:100%;background:var(--bg2)}
+.ph-t img{width:100%;height:100%;object-fit:cover}
+dialog{border:1px solid var(--ln);border-radius:14px;background:var(--bg);color:var(--tx);padding:18px;width:min(92vw,420px);margin:auto}
+dialog::backdrop{background:#0008}
+dialog label{display:block;margin:10px 0 4px;font-size:13px;color:var(--mu)}
+dialog input[type=text],dialog select{width:100%;background:var(--bg2);color:var(--tx);border:1px solid var(--ln);border-radius:8px;padding:8px;font:inherit}
+dialog input[type=file]{width:100%}
+.bar{display:flex;gap:8px;justify-content:flex-end;margin-top:16px}
+#lb{width:min(96vw,900px)}
+#lb img{width:100%;max-height:75vh;object-fit:contain;border-radius:8px}
+[hidden]{display:none!important}
+button:disabled{opacity:.5;cursor:default}
+.clk{text-align:right;line-height:1.12;font-variant-numeric:tabular-nums;padding:2px 2px;flex:none;white-space:nowrap}
+.clk b{display:block;font-size:15px}
+.clk small{display:block;color:var(--mu);font-size:11px}
+.coin{padding:5px 10px;flex:none;font-weight:700;white-space:nowrap}
+#toast{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(var(--bn) + 18px + env(safe-area-inset-bottom,0px));background:var(--tx);color:var(--bg);padding:10px 16px;border-radius:12px;z-index:20;max-width:90vw;text-align:center}
+.wal{max-width:640px;margin:0 auto}
+.box{border:1px solid var(--ln);border-radius:14px;padding:14px;margin-bottom:14px}
+.days{display:grid;grid-template-columns:repeat(7,1fr);gap:6px;margin:12px 0}
+.day{background:var(--bg2);border-radius:10px;padding:8px 2px;text-align:center;font-size:12px}
+.day b{display:block;font-size:13px}
+.day.ok{opacity:.5}
+.day.cur{outline:2px solid var(--ac)}
+.bar2{height:10px;border-radius:6px;background:var(--bg2);overflow:hidden;margin-top:8px}
+.bar2 i{display:block;height:100%;background:var(--ac)}
+.shop{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}
+#de{width:min(94vw,460px);max-height:92vh;overflow:auto}
+#de input[type=range]{width:100%}
+#ecv{width:100%;height:auto;max-height:45vh;object-fit:contain;border-radius:8px;background:var(--bg2)}
+.ph0{height:100%;display:grid;place-items:center;align-content:center;gap:2px;font-size:30px;background:linear-gradient(135deg,var(--bg2),var(--ln));text-align:center}
+.ph0 small{font-size:12px;color:var(--mu)}
+#ed{position:fixed;inset:0;z-index:15;background:#8a93a3;display:flex;flex-direction:column;padding-top:env(safe-area-inset-top)}
+.edtop{display:flex;gap:6px;align-items:center;padding:8px;background:var(--bg);overflow-x:auto}
+.edtop button{white-space:nowrap;flex:none}
+.edtop input{flex:1;min-width:110px;background:var(--bg2);color:var(--tx);border:1px solid var(--ln);border-radius:8px;padding:6px 10px;font:inherit}
+.hb{display:flex;gap:4px;align-items:center;overflow-x:auto;padding:6px 8px;background:var(--bg);border-top:1px solid var(--ln);border-bottom:1px solid var(--ln)}
+.hb button{min-width:34px;height:34px;border-radius:8px;background:var(--bg2);flex:none;font-size:14px}
+.hb select{height:34px;border-radius:8px;background:var(--bg2);color:var(--tx);border:1px solid var(--ln);max-width:110px;flex:none;font:inherit;font-size:13px}
+.hb input[type=color]{width:34px;height:34px;padding:0;border:0;background:none;flex:none}
+.edwrap{flex:1;overflow:auto;padding:12px}
+#paperbox{margin:0 auto;position:relative}
+#paper{position:absolute;left:0;top:0;transform-origin:top left;color:#111;box-shadow:0 2px 14px #0005;outline:0;overflow-wrap:anywhere;font:16px/1.6 "Noto Sans Khmer","Khmer OS",system-ui,sans-serif}
+#paper h1{font-size:28px;margin:.4em 0}#paper h2{font-size:21px;margin:.8em 0 .3em}#paper h3{font-size:17px}
+#paper ul,#paper ol{padding-left:24px}
+button.sc{border:0;text-align:left;width:100%;cursor:pointer}
+@media print{body{padding:0!important}body>*:not(#ed){display:none!important}#ed{position:static!important;display:block!important;background:#fff!important;padding:0!important}.edtop,.hb{display:none!important}.edwrap{overflow:visible!important;padding:0!important}#paperbox{width:auto!important;height:auto!important}#paper{position:static!important;transform:none!important;box-shadow:none!important}}
+.dgm{max-height:40vh;overflow:auto;margin:8px 0}
+.bm{max-width:92%;padding:8px 12px;border-radius:12px;margin:6px 0;background:var(--bg2);white-space:pre-wrap;overflow-wrap:anywhere}
+.bm.me{margin-left:auto;background:var(--ac);color:var(--acx)}
+.bm .pill{margin-top:6px;display:inline-block}
+.lockbox{display:grid;place-items:center;align-content:center;gap:2px;text-align:center;padding:16px;background:var(--bg2);border-radius:12px;min-height:160px}
+.lockbox.wl{aspect-ratio:16/9;width:100%}
+.lockbox.rl{height:100%;background:#111;color:#fff;border-radius:0}
+.lockbox.rl .s{color:#ccc}
+.ptag{position:absolute;left:6px;bottom:6px;background:#000c;color:#fff;font-size:12px;padding:1px 6px;border-radius:5px}
+.ptag.inl{position:static;display:inline-block;background:var(--bg2);color:var(--tx)}
+.chk{display:flex;gap:8px;align-items:flex-start;margin:8px 0;font-size:13px;color:var(--mu)}
+.chk input{margin-top:3px;flex:none}
+.apl{border-radius:12px;overflow:hidden;background:var(--bg2)}
+.apl .ph0{height:auto}
+.aud{width:100%;display:block}
+.tvp{margin-bottom:12px}
+.tvp video{width:100%;aspect-ratio:16/9;background:#000;border-radius:12px;display:block}
+.tvi{display:flex;gap:10px;align-items:center;width:100%;text-align:left;padding:8px;border-radius:10px;border:1px solid var(--ln);margin-bottom:6px;cursor:pointer}
+.tvi img,.tvi .lg0{width:40px;height:40px;border-radius:8px;background:var(--bg2);flex:none;object-fit:contain;display:grid;place-items:center}
+.fvid{width:100%;border-radius:12px;margin-top:8px;max-height:60vh;background:#000;display:block}
+.mc{min-width:0;border:1px solid var(--ln);border-radius:12px;padding:8px}
+.mc .t{margin-top:6px}
+.sel{width:100%;background:var(--bg2);color:var(--tx);border:1px solid var(--ln);border-radius:8px;padding:8px;font:inherit}
+.ib.bell{position:relative;overflow:visible}
+.bdg{position:absolute;top:-3px;right:-3px;min-width:18px;height:18px;padding:0 4px;border-radius:9px;background:#e5252a;color:#fff;font:700 11px/18px system-ui,sans-serif;text-align:center;font-style:normal;box-shadow:0 0 0 2px var(--bg)}
+.bdg.pop{animation:bpop .5s}
+@keyframes bpop{0%{transform:scale(.4)}55%{transform:scale(1.35)}100%{transform:scale(1)}}
+@media(prefers-reduced-motion:reduce){.bdg.pop{animation:none}}
+.nt{display:flex;gap:10px;width:100%;text-align:left;padding:10px;border-radius:10px;align-items:flex-start;position:relative}
+.nt.un{background:var(--bg2)}
+.nt .ni{font-size:22px;flex:none}
+.nt .dt{position:absolute;right:10px;top:14px;width:9px;height:9px;border-radius:50%;background:#e5252a}
+.ta{width:100%;background:var(--bg2);color:var(--tx);border:1px solid var(--ln);border-radius:10px;padding:10px;font:inherit;resize:vertical}
+.pimg{display:grid;gap:4px;margin-top:8px;border-radius:10px;overflow:hidden}
+.pimg.n1{grid-template-columns:1fr}.pimg.n2,.pimg.n4{grid-template-columns:1fr 1fr}.pimg.n3{grid-template-columns:1fr 1fr 1fr}
+.pimg button{padding:0;aspect-ratio:1;overflow:hidden;background:var(--bg2);display:block;width:100%}
+.pimg.n1 button{aspect-ratio:4/3}
+.pimg img{width:100%;height:100%;object-fit:cover;display:block}
+.pv{display:flex;gap:6px;flex-wrap:wrap;margin-top:8px}
+.pv img{width:56px;height:56px;object-fit:cover;border-radius:8px}
+.lw{font-size:20px;font-weight:700;line-height:1.3}
+:root{--sb:50px}
+.logo{margin-right:auto}
+.sbar{position:sticky;top:calc(var(--hh) + env(safe-area-inset-top,0px));z-index:4;background:var(--bg);padding:8px 12px;border-bottom:1px solid var(--ln)}
+.sbar .search{margin:0 auto}
+nav{top:calc(var(--hh) + var(--sb) + env(safe-area-inset-top,0px));height:calc(100vh - var(--hh) - var(--sb))}
+.card .t{font-size:14px}
+.card .s{font-size:12px}
+.card .av{width:32px;height:32px;font-size:14px}
+a.pill{display:inline-block;text-decoration:none;color:inherit}
+a.pill.on{color:var(--acx)}
+.socg{display:grid;gap:8px;margin-top:10px}
+.soc{display:flex;gap:8px;align-items:center}
+.sc{flex:1;display:flex;align-items:center;gap:12px;padding:10px;border-radius:12px;background:var(--bg2);text-decoration:none;color:inherit}
+.si{width:36px;height:36px;border-radius:10px;display:grid;place-items:center;color:#fff;font-weight:800}
+.res{display:flex;gap:10px;padding:10px 0;border-bottom:1px solid var(--ln);align-items:flex-start}
+@media(max-width:900px){.watch,.hero{grid-template-columns:1fr}}
+@media(max-width:720px){
+ :root{--bn:58px}
+ nav{position:fixed;inset:auto 0 0 0;top:auto;width:auto;height:auto;display:flex;justify-content:space-around;background:var(--bg);border-top:1px solid var(--ln);border-right:0;z-index:6;padding:4px 4px env(safe-area-inset-bottom,0px)}
+ nav button{flex-direction:column;align-items:center;gap:0;font-size:10px;padding:4px 1px;width:auto;flex:1;min-width:0;overflow:hidden;white-space:nowrap}
+ main{padding:10px 10px 80px}
+ .logo span{display:none}
+ header{gap:5px;padding:0 8px}
+ #th{display:none}
+ .grid{grid-template-columns:repeat(2,1fr);gap:14px 8px}
+ .card .av{width:28px;height:28px;font-size:12px}
+ .card .t{font-size:13px}
+ .card .s{font-size:11px}
+ .chips button{padding:4px 12px;font-size:13px}
+ .grid.p{grid-template-columns:repeat(3,1fr)}
+ .grid.ph{grid-template-columns:repeat(3,1fr)}
+ .reels{border-radius:0}
+ main.rm{padding:0 0 var(--bn)}
+}
+@media(prefers-reduced-motion:reduce){*{scroll-behavior:auto!important}}
+</style>
+<style id="pgs"></style>
+</head>
+<body>
+<header>
+ <button class="logo" data-p="home" aria-label="ទំព័រដើម"><i></i><span>VidKH</span></button>
+ <button class="ib" data-a="up" title="បង្ហោះ" aria-label="បង្ហោះ">＋</button>
+ <button class="ib bell" data-a="bell" title="ការជូនដំណឹង" aria-label="ការជូនដំណឹង">🔔<i class="bdg" id="bdg" hidden>0</i></button>
+ <button class="ib" id="th" title="ផ្លាស់ប្តូរពណ៌" aria-label="ផ្លាស់ប្តូរពណ៌">◐</button>
+ <button class="pill coin" id="coin" data-p="wallet" aria-label="កាក់"></button>
+ <button class="ib" id="acc" aria-label="គណនី"></button>
+ <button class="clk" id="clk" aria-label="ម៉ោង"></button>
+</header>
+<div class="sbar" id="sbar"><form class="search" id="sf"><input id="q" type="search" placeholder="ស្វែងរក" aria-label="ស្វែងរក"></form></div>
+<div class="layout"><nav id="nav"></nav><main id="app"></main></div>
+
+<dialog id="din">
+ <h3>ចូលគណនី</h3>
+ <div id="gbtn" style="margin:14px 0;min-height:4px"></div>
+ <p class="s" id="gnote" hidden>ដើម្បីប្រើ Google សូមដាក់ GOOGLE_CLIENT_ID ក្នុងកូដ (មើលការណែនាំ)។</p>
+ <label>ឬបង្កើតគណនីក្នុងឧបករណ៍នេះ</label>
+ <input type="text" id="ln" placeholder="ឈ្មោះរបស់អ្នក">
+ <div class="bar"><button class="pill" onclick="this.closest('dialog').close()">បោះបង់</button><button class="pill on" id="lok">បង្កើត</button></div>
+</dialog>
+
+<dialog id="du">
+ <h3>បង្ហោះ</h3>
+ <label>ប្រភេទ</label>
+ <select id="uk"><option value="video">វីដេអូ</option><option value="reel">Reels (វីដេអូខ្លី)</option><option value="movie">ភាពយន្ត</option><option value="photo">រូបថត</option><option value="audio">🎵 ចម្លេង (អូឌីយ៉ូ)</option></select>
+ <label>ប្រភេទមាតិកា</label><select id="ucat"><option value="">ទូទៅ</option><option value="music">🎵 តន្ត្រី</option><option value="game">🎮 ហ្គេម</option><option value="place">📍 កន្លែង</option><option value="cartoon">🧸 តុក្កតា</option><option value="story">សម្រាយរឿង</option><option value="tech">បច្ចេកវិទ្យា</option><option value="news">ព័ត៌មាន</option></select>
+ <label>ចំណងជើង</label><input type="text" id="ut">
+ <label>ឯកសារ</label><input type="file" id="uf" accept="video/*">
+ <p class="s" style="margin-top:6px">💾 កម្មវិធីរក្សាទុកច្បាប់ចម្លងផ្ទាល់ខ្លួន។ បង្ហោះរួច អ្នកអាចលុបឯកសារដើមពីទូរស័ព្ទបាន ហើយនៅតែមើលក្នុងកម្មវិធីបាន (លុបទិន្នន័យកម្មវិធី ឬ uninstall នឹងបាត់ទាំងអស់)។</p>
+ <label>🪙 តម្លៃមើល (កាក់) · 0 = ឥតគិតថ្លៃ</label><input type="text" id="upr" inputmode="numeric" value="10">
+ <label class="chk"><input type="checkbox" id="ufr" checked> ឥតគិតថ្លៃ ៧ ថ្ងៃដំបូង រួចទើបបង់កាក់</label>
+ <label class="chk"><input type="checkbox" id="uow"> ខ្ញុំជាម្ចាស់ ឬមានសិទ្ធិលក់មាតិកានេះ (ត្រូវបញ្ជាក់បើដាក់តម្លៃ)</label>
+ <p class="s" id="um" style="margin-top:8px"></p>
+ <div class="bar"><button class="pill" onclick="this.closest('dialog').close()">បោះបង់</button><button class="pill on" id="us">បង្ហោះ</button></div>
+</dialog>
+
+<dialog id="lb">
+ <img id="lbi" alt="">
+ <div class="row" style="margin-top:10px"><b id="lbt"></b><div class="act"><button class="pill" id="lbe" data-a="edit">✂ កាត់ត</button><button class="pill" id="lbd" data-a="del">លុប</button><button class="pill" onclick="this.closest('dialog').close()">បិទ</button></div></div>
+</dialog>
+
+<dialog id="de">
+ <h3 id="det"></h3>
+ <div id="dep">
+  <canvas id="ecv"></canvas>
+  <div class="act" style="margin:8px 0"><button class="pill" data-a="auto">✨ ស្វ័យប្រវត្តិ</button><button class="pill" data-a="rot">⟳ បង្វិល</button></div>
+  <label>ពន្លឺ</label><input type="range" id="eb" min="50" max="150" value="100">
+  <label>កុងត្រាស្ត</label><input type="range" id="ec" min="50" max="150" value="100">
+  <label>ពណ៌ស្រស់</label><input type="range" id="es" min="0" max="200" value="100">
+  <label>ឆ្លុះពណ៌</label><select id="ef"><option value="n">ដើម</option><option value="bw">ស-ខ្មៅ</option><option value="sp">ពណ៌ចាស់</option><option value="wm">កក់ក្តៅ</option><option value="cl">ត្រជាក់</option></select>
+  <label>កាត់ទំហំ</label><select id="ek"><option value="0">ដើម</option><option value="1:1">1:1</option><option value="16:9">16:9</option><option value="9:16">9:16</option><option value="4:5">4:5</option></select>
+ </div>
+ <div id="dev">
+  <video id="evp" controls playsinline style="width:100%;max-height:45vh;background:#000;border-radius:8px"></video>
+  <label>ចាប់ផ្តើម (វិនាទី)</label><input type="range" id="e1" min="0" value="0">
+  <label>បញ្ចប់ (វិនាទី)</label><input type="range" id="e2" min="0" value="0">
+  <p class="s" id="evl"></p>
+ </div>
+ <p class="s" id="dem" style="margin-top:8px"></p>
+ <div class="bar"><button class="pill" onclick="this.closest('dialog').close()">បោះបង់</button><button class="pill on" id="dok">រក្សាទុក (ប្រើ ១ ក្រេឌីត)</button></div>
+</dialog>
+<div id="ed" hidden>
+ <div class="edtop">
+  <button class="pill" data-a="edclose">← ត្រឡប់</button>
+  <input id="edt" type="text" placeholder="ចំណងជើង" aria-label="ចំណងជើង">
+  <button class="pill" data-a="edpaper">📄 ក្រដាស</button>
+  <button class="pill" data-a="edcopy">&lt;/&gt; HTML</button>
+  <button class="pill" data-a="edprint">🖨 PDF</button>
+  <button class="pill on" data-a="edsave">រក្សាទុក</button>
+ </div>
+ <div class="hb" id="hb">
+  <button data-c="undo" aria-label="undo">↶</button><button data-c="redo" aria-label="redo">↷</button>
+  <select id="hbf" aria-label="ពុម្ពអក្សរ"><option value="'Noto Sans Khmer',sans-serif">Sans</option><option value="Georgia,'Times New Roman',serif">Serif</option><option value="ui-monospace,monospace">Mono</option></select>
+  <select id="hbs" aria-label="ទំហំអក្សរ"><option value="">ទំហំ</option><option value="1">10</option><option value="2">13</option><option value="3">16</option><option value="4">18</option><option value="5">24</option><option value="6">32</option><option value="7">48</option></select>
+  <select id="hbb" aria-label="រចនាបថ"><option value="p">អត្ថបទ</option><option value="h1">ចំណងជើង ១</option><option value="h2">ចំណងជើង ២</option><option value="h3">ចំណងជើង ៣</option></select>
+  <button data-c="bold"><b>B</b></button><button data-c="italic"><i>I</i></button><button data-c="underline"><u>U</u></button><button data-c="strikeThrough"><s>S</s></button>
+  <input type="color" id="hbc" value="#000000" title="ពណ៌អក្សរ" aria-label="ពណ៌អក្សរ"><button data-c="foreColor" data-v="#d62828" style="color:#d62828" aria-label="អក្សរក្រហម"><b>A</b></button>
+  <input type="color" id="hbh" value="#ffff00" title="ពណ៌ផ្ទៃអក្សរ" aria-label="ពណ៌ផ្ទៃអក្សរ">
+  <button data-c="justifyLeft">L</button><button data-c="justifyCenter">C</button><button data-c="justifyRight">R</button><button data-c="justifyFull">J</button>
+  <button data-c="insertUnorderedList">•≡</button><button data-c="insertOrderedList">1.</button><button data-c="outdent">⇤</button><button data-c="indent">⇥</button>
+  <button data-c="insertHorizontalRule">―</button><button data-c="removeFormat">Tx</button>
+ </div>
+ <div class="edwrap" id="edwrap"><div id="paperbox"><div id="paper" contenteditable="true" spellcheck="false"></div></div></div>
+</div>
+
+<dialog id="dp">
+ <h3>កែសម្រួលក្រដាស</h3>
+ <label>ទំហំ</label><select id="pps"><option value="A4">A4</option><option value="A5">A5</option><option value="Letter">Letter</option></select>
+ <label>ទិសដៅ</label><select id="ppo"><option value="portrait">ឈរ</option><option value="landscape">ផ្តេក</option></select>
+ <label>គែមក្រដាស</label><select id="ppm"><option value="40">តូច</option><option value="64">ធម្មតា</option><option value="90">ធំ</option></select>
+ <label>ពណ៌ក្រដាស</label><select id="ppc"><option value="#ffffff">ស</option><option value="#fff8e7">ក្រែម</option><option value="#eef4ff">ខៀវស្រាល</option><option value="#fff0f0">ក្រហមស្រាល</option><option value="#f1fbef">បៃតងស្រាល</option></select>
+ <div class="bar"><button class="pill on" onclick="this.closest('dialog').close()">រួចរាល់</button></div>
+</dialog>
+
+<dialog id="dt">
+ <h3>ជ្រើសរើសក្រដាស</h3>
+ <div id="dtl" class="socg"></div>
+ <div class="bar"><button class="pill" onclick="this.closest('dialog').close()">បោះបង់</button></div>
+</dialog>
+
+<dialog id="dmk">
+ <h3>🛒 លក់ឥវ៉ាន់</h3>
+ <label>ឈ្មោះឥវ៉ាន់</label><input type="text" id="mkn" maxlength="80">
+ <label>លេខទូរស័ព្ទ</label><input type="text" id="mkp" inputmode="tel" placeholder="+855 ...">
+ <label>ទីតាំង</label><input type="text" id="mkl" maxlength="120" placeholder="ភូមិ / ខណ្ឌ / ខេត្ត">
+ <label>តម្លៃ</label><div style="display:flex;gap:8px"><input type="text" id="mkv" inputmode="decimal" style="flex:1"><select id="mkc" style="width:auto"><option value="USD">$ ដុល្លារ</option><option value="KHR">៛ រៀល</option></select></div>
+ <label>ប្រភេទឥវ៉ាន់</label><select id="mkt"></select>
+ <label>រូបថត (មិនចាំបាច់)</label><input type="file" id="mkf" accept="image/*">
+ <p class="s" id="mkm" style="margin-top:8px"></p>
+ <div class="bar"><button class="pill" onclick="this.closest('dialog').close()">បោះបង់</button><button class="pill on" id="mkok">ដាក់លក់</button></div>
+</dialog>
+
+<dialog id="dg">
+ <div class="row"><h3 id="dgt"></h3><button class="pill" onclick="this.closest('dialog').close()">បិទ</button></div>
+ <p class="s">ជំនួយការណែនាំក្នុងកម្មវិធី ឆ្លើយតាមសំណួរដែលបានកំណត់ទុក (មិនមែនម៉ូដែល AI ពិតប្រាកដទេ)។</p>
+ <div id="dgm" class="dgm"></div>
+ <div class="chips" id="dgc"></div>
+ <form id="dgf" class="cmi"><input id="dgi" placeholder="សួរអំពីកម្មវិធី..." aria-label="សួរ"><button class="pill on">ផ្ញើ</button></form>
+</dialog>
+
+<dialog id="dn">
+ <div class="row"><h3>🔔 ការជូនដំណឹង</h3><button class="pill" onclick="this.closest('dialog').close()">បិទ</button></div>
+ <div id="dnl" style="margin-top:8px;max-height:60vh;overflow:auto"></div>
+</dialog>
+
+<dialog id="dw">
+ <h3>⚠️ ព្រមាន៖ តំណពីខាងក្រៅ</h3>
+ <p style="margin:10px 0">អ្នកកំពុងចាកចេញទៅ <b id="dwh"></b> ដែលមិនមែនជារបស់កម្មវិធីនេះទេ។ កុំទាញយកឯកសារ (ជាពិសេស .apk) កុំបញ្ចូលពាក្យសម្ងាត់ ឬលេខកូដ បើមិនទុកចិត្តគេហទំព័រនោះ។</p>
+ <label><input type="checkbox" id="dwr"> ទុកចិត្តគេហទំព័រនេះ (កុំព្រមានម្តងទៀត)</label>
+ <div class="bar"><button class="pill" onclick="this.closest('dialog').close()">បោះបង់</button><a class="pill on" id="dwo" target="_blank" rel="noopener" href="#">បន្ត</a></div>
+</dialog>
+<dialog id="dy">
+ <h3>បន្ថែមតំណ (YouTube, Facebook, TikTok, ...)</h3>
+ <label>តំណ (ត្រូវចាប់ផ្តើមដោយ https://)</label><input type="text" id="dyu" placeholder="https://...">
+ <label>ចំណងជើង</label><input type="text" id="dyt">
+ <label>ប្រភេទ</label><select id="dyc"><option value="video">ទូទៅ</option><option value="music">🎵 តន្ត្រី</option><option value="game">🎮 ហ្គេម</option><option value="place">📍 កន្លែង</option><option value="cartoon">🧸 តុក្កតា</option><option value="story">សម្រាយរឿង</option><option value="tech">បច្ចេកវិទ្យា</option><option value="news">ព័ត៌មាន</option></select>
+ <label>🪙 តម្លៃមើល (កាក់) · 0 = ឥតគិតថ្លៃ</label><input type="text" id="dypr" inputmode="numeric" value="10">
+ <label class="chk"><input type="checkbox" id="dyfr" checked> ឥតគិតថ្លៃ ៧ ថ្ងៃដំបូង រួចទើបបង់កាក់</label>
+ <label class="chk"><input type="checkbox" id="dyow"> ខ្ញុំជាម្ចាស់ ឬមានសិទ្ធិលក់មាតិកានេះ (ត្រូវបញ្ជាក់បើដាក់តម្លៃ)</label>
+ <p class="s" id="dym" style="margin-top:8px"></p>
+ <div class="bar"><button class="pill" onclick="this.closest('dialog').close()">បោះបង់</button><button class="pill on" id="dys">បន្ថែម</button></div>
+</dialog>
+<div id="toast" hidden></div>
+
+<script>
+const GOOGLE_CLIENT_ID=""; /* ដាក់ Client ID ពី Google Cloud Console នៅទីនេះ */
+const AI_NAME="AI Sonnet 3.0"; /* ប្តូរឈ្មោះឧបករណ៍កាត់តនៅទីនេះ */
+const REW=[50,75,100,125,150,175,200]; /* កាក់ថ្ងៃទី ១ ដល់ ៧ */
+const LGOAL=180,LREW=20; /* បេសកកម្មតំណ៖ វិនាទី និងកាក់ក្នុងមួយថ្ងៃ */
+const GOAL=180; /* វិនាទីមើលវីដេអូក្នុងមួយថ្ងៃ (៣ នាទី) */
+const DATA=[[10,50],[50,200],[100,350]]; /* [GB, កាក់] */
+const AIP=[[5,50],[15,120],[40,250]]; /* [ក្រេឌីត, កាក់] */
+const YQ={story:"សម្រាយរឿង",tech:"បច្ចេកវិទ្យា",news:"ព័ត៌មានកម្ពុជា",music:"តន្ត្រីខ្មែរ",game:"ហ្គេម",place:"កន្លែងទេសចរណ៍កម្ពុជា",cartoon:"តុក្កតាខ្មែរ"};
+const BLOG="https://pc-schoolcambodia.blogspot.com/?m=1";
+const SOC=[["Facebook","f","#1877f2","https://www.facebook.com/"],["TikTok","♪","#111","https://www.tiktok.com/"],["Telegram","✈","#27a7e7","https://t.me/"],["Instagram","◎","#e1306c","https://www.instagram.com/"],["YouTube","▶","#ff0033","https://www.youtube.com/"],["X","X","#000","https://x.com/"]];
+const base=[];
+let S={mine:[],u:{},cm:{},user:null,yt:[],soc:{},notes:[],gseen:0,posts:[],vw:{},sh:{}};
+try{Object.assign(S,JSON.parse(localStorage.getItem("vidkh2")||"{}"))}catch(e){}
+const save=()=>{try{localStorage.setItem("vidkh2",JSON.stringify(S))}catch(e){}};
+let URLS={};
+const idb=new Promise(r=>{try{const q=indexedDB.open("vidkh",1);q.onupgradeneeded=()=>q.result.createObjectStore("b");q.onsuccess=()=>r(q.result);q.onerror=()=>r(null)}catch(e){r(null)}});
+const put0=(id,f)=>idb.then(d=>new Promise((ok,no)=>{if(!d)return no();const t=d.transaction("b","readwrite");t.objectStore("b").put(f,id);t.oncomplete=ok;t.onerror=no}));
+const drop=id=>idb.then(d=>{if(d)d.transaction("b","readwrite").objectStore("b").delete(id)});
+const getB=id=>idb.then(d=>new Promise(ok=>{if(!d)return ok(null);const r=d.transaction("b").objectStore("b").get(id);r.onsuccess=()=>ok(r.result||null);r.onerror=()=>ok(null)}));
+const put=async(id,f)=>{
+ try{if(navigator.storage&&navigator.storage.persist)navigator.storage.persist()}catch(e){}
+ try{
+  await put0(id,f);
+  const b=await getB(id);
+  if(!b||b.size!==f.size)throw new Error("verify");
+ }catch(e){drop(id);throw e}
+};
+const loadAll=()=>idb.then(d=>new Promise(ok=>{const o={};if(!d)return ok(o);const c=d.transaction("b").objectStore("b").openCursor();c.onsuccess=e=>{const r=e.target.result;if(r){o[r.key]=URL.createObjectURL(r.value);r.continue()}else ok(o)};c.onerror=()=>ok(o)}));
+const $=s=>document.querySelector(s);
+const esc=s=>String(s).replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[m]));
+const fmt=n=>n>=1e6?(n/1e6).toFixed(1)+" លាន":n>=1e3?Math.round(n/1e3)+" ពាន់":n;
+const COL=["#2f6bff","#e0457b","#13a67a","#e08a1e","#8a55e0","#d6453d"];
+const col=s=>COL[[...String(s)].reduce((a,c)=>a+c.charCodeAt(0),0)%COL.length];
+const all=()=>base.concat(S.yt||[],S.mine);
+const src=v=>v.local?(URLS[v.id]||""):v.u;
+const D0=()=>({likes:[],subs:[],hist:[],later:[],docs:[],paid:[],earn:0,seen:0,coins:0,gb:0,ai:0,m:{day:1,sec:0,d:"",c:""},lm:{sec:0,d:"",c:""}});
+const U=()=>{
+ if(!S.user)return D0();
+ const u=S.u[S.user.id]||(S.u[S.user.id]={}),d=D0();
+ for(const k in d)if(!(k in u))u[k]=d[k];
+ return u;
+};
+const today=()=>{const n=new Date();return n.getFullYear()+"-"+(n.getMonth()+1)+"-"+n.getDate()};
+const mis=()=>{const m=U().m;if(m.d!==today()){m.d=today();m.sec=0}return m};
+const lmis=()=>{const l=U().lm;if(l.d!==today()){l.d=today();l.sec=0}return l};
+const GB=1073741824,FREE=70;
+const fmtB=b=>b>=GB?(b/GB).toFixed(2)+" GB":(b/1048576).toFixed(1)+" MB";
+const used=()=>all().filter(v=>v.local&&S.user&&v.o===S.user.id).reduce((a,v)=>a+(v.sz||0),0)+(S.posts||[]).filter(p=>S.user&&p.uid===S.user.id).reduce((a,p)=>a+(p.imgs||[]).reduce((b,m)=>b+(m.sz||0),0),0)+(S.feed||[]).filter(p=>S.user&&p.uid===S.user.id).reduce((a,p)=>a+(p.media||[]).reduce((b,m)=>b+(m.sz||0),0),0)+(S.shop||[]).filter(x=>S.user&&x.uid===S.user.id).reduce((a,x)=>a+(x.sz||0),0);
+const lim=()=>(FREE+U().gb)*GB;
+const own=v=>v.local&&S.user&&v.o===S.user.id;
+const av=(n,p,c="")=>p?`<img class="av ${c}" src="${esc(p)}" alt="">`:`<div class="av ${c}" style="background:${col(n)}">${esc(String(n)[0]||"?")}</div>`;
+const vid0=(v,c="")=>`<div class="th ${c}">${v.yt?`<img src="https://i.ytimg.com/vi/${esc(v.yt)}/hqdefault.jpg" alt="">`:(v.k==="audio"||v.kind==="audio")?`<div class="ph0">🎵<small>${esc(v.ch)}</small></div>`:v.kind&&v.kind!=="mp4"?`<div class="ph0">${ICON[v.kind]||"🔗"}<small>${esc(v.ch)}</small></div>`:`<video src="${esc(src(v))}#t=2" preload="metadata" muted playsinline></video>`}${v.d?`<span class="dur">${esc(v.d)}</span>`:""}</div>`;
+const card=(v,po)=>`<button class="card" data-v="${v.id}">${vid(v,po?"po":"")}<div class="meta">${po?"":av(v.ch)}<div><div class="t">${esc(v.t)}</div><div class="s">${esc(v.ch)} · មើល ${fmt(vcount(v))} ដង · ${ago(tsOf(v))}</div></div></div></button>`;
+const grid=(l,msg,cls="",f=card,po)=>l.length?`<div class="grid ${cls}">${l.map(x=>f(x,po)).join("")}</div>`:`<div class="empty">${msg}</div>`;
+let V={page:"home",q:"",cat:"all",cur:null,tab:"up",snd:false,lang:"zh",st:"les",draft:"",pfiles:[]};
+
+const NAV=[["home","⌂","ដើម"],["reels","▶","Reels"],["movies","🎬","ភាពយន្ត"],["photos","▣","រូបថត"],["social","🌐","សង្គម"],["you","☺","ខ្ញុំ"]];
+function renderNav(){
+ $("#nav").innerHTML=NAV.map(([k,i,l])=>`<button data-p="${k}" class="${V.page===k||(V.page==="watch"&&k==="home")?"on":""}"><span>${i}</span>${l}</button>`).join("");
+ $("#acc").innerHTML=S.user?av(S.user.name,S.user.pic):"ចូល";
+ $("#acc").dataset.p="you";
+ $("#coin").textContent="🪙 "+U().coins;
+ bell();
+}
+const CATS=[["all","ទាំងអស់"],["feed","📰 Feed"],["tv","📺 ទូរទស្សន៍"],["video","វីដេអូ"],["movie","ភាពយន្ត"],["music","🎵 តន្ត្រី"],["game","🎮 ហ្គេម"],["place","📍 កន្លែង"],["cartoon","🧸 តុក្កតា"],["story","សម្រាយរឿង"],["tech","បច្ចេកវិទ្យា"],["news","ព័ត៌មាន"],["study","📚 សិក្សា"],["market","🛒 ផ្សារ"],["mine","របស់ខ្ញុំ"]];
+const chipsH=()=>`<div class="chips">${CATS.map(([k,n])=>`<button data-c="${k}" class="${V.cat===k?"on":""}">${n}</button>`).join("")}</div>`;
+function home(){
+ let l=all().filter(v=>v.k==="video"||v.k==="movie"||v.k==="audio");
+ if(V.q){const q=V.q.toLowerCase();l=all().filter(v=>v.k!=="photo"&&(v.t+v.ch).toLowerCase().includes(q))}
+ else if(V.cat==="mine")l=l.filter(v=>own(v)||v.my);
+ else if(V.cat!=="all")l=all().filter(v=>v.k!=="photo"&&(v.k===V.cat||v.cat===V.cat));
+ if(V.cat==="tv"&&!V.q)return chipsH()+tvView();
+ if(V.cat==="feed"&&!V.q)return chipsH()+feedView();
+ if(V.cat==="market"&&!V.q)return chipsH()+marketView();
+ if(V.cat==="study"&&!V.q)return `<div class="chips">${CATS.map(([k,n])=>`<button data-c="${k}" class="${V.cat===k?"on":""}">${n}</button>`).join("")}</div>`+study();
+ return `<div class="chips">${CATS.map(([k,n])=>`<button data-c="${k}" class="${V.cat===k?"on":""}">${n}</button>`).join("")}</div>`+(!V.q?`<div class="act" style="margin-bottom:12px"><button class="pill" data-a="upk" data-k="video">🎬 វីដេអូ</button><button class="pill" data-a="upk" data-k="movie">🍿 ភាពយន្ត</button><button class="pill" data-a="upk" data-k="reel">▶ Reels</button><button class="pill" data-a="upk" data-k="photo">🖼 រូបថត</button><button class="pill" data-a="upk" data-k="audio" data-cat="music">🎵 តន្ត្រី</button><button class="pill" data-a="upk" data-k="video" data-cat="game">🎮 ហ្គេម</button><button class="pill" data-a="upk" data-k="video" data-cat="place">📍 កន្លែង</button><button class="pill" data-a="upk" data-k="video" data-cat="cartoon">🧸 តុក្កតា</button><button class="pill on" data-a="yadd">＋ តំណ</button>${YQ[V.cat]?`<a class="pill" target="_blank" rel="noopener" href="https://www.youtube.com/results?search_query=${encodeURIComponent(YQ[V.cat])}">🔎 រកក្នុង YouTube</a>`:""}</div>`:"")+grid(l.slice().reverse(),V.q?"រកមិនឃើញវីដេអូទេ។":"មិនទាន់មានវីដេអូទេ។ ចុច ＋ ខាងលើដើម្បីបង្ហោះ ឬបន្ថែមតំណ។");
+}
+function movies(){
+ const m=all().filter(v=>v.k==="movie"),h=m[0];
+ if(!h)return `<div class="empty">មិនទាន់មានភាពយន្តទេ។</div>`;
+ return `<div class="hero"><div class="th">${locked(h)?`<div class="ph0">🔒<small>🪙 ${price(h)}</small></div>`:`<video src="${esc(src(h))}#t=20" preload="metadata" muted playsinline></video>`}</div><div><h2>${esc(h.t)}</h2><p>${esc(h.x||"")}</p><button class="pill on" data-v="${h.id}">▶ ចាក់ឥឡូវ</button></div></div><h3 style="margin-bottom:10px">ភាពយន្តទាំងអស់</h3>`+grid(m,"","p",card,true);
+}
+function reels(){
+ const r=all().filter(v=>v.k==="reel"),u=U();
+ if(!r.length)return `<div class="empty">មិនទាន់មាន Reels ទេ។ ចុច ＋ ដើម្បីបង្ហោះ។</div>`;
+ return `<div class="reels" id="rl">${r.slice().reverse().map(v=>`<section class="reel" data-id="${v.id}">${locked(v)?lockBox(v,"v","rl"):`<video src="${esc(src(v))}" loop playsinline ${V.snd?"":"muted"}></video>`}<div class="ra"><button data-a="like" data-i="${v.id}" class="${u.likes.includes(v.id)?"on":""}" aria-label="ចូលចិត្ត">♥</button><button data-a="cm" data-i="${v.id}" aria-label="មតិ">💬<small>${(S.cm[v.id]||[]).length}</small></button><button data-a="share" data-i="${v.id}" aria-label="ចែករំលែក">↗</button>${(v.local&&!locked(v))?`<button data-a="vdl" data-i="${v.id}" aria-label="ទាញយក">⬇</button>`:""}<button data-a="snd" aria-label="សំឡេង">${V.snd?"🔊":"🔇"}</button>${own(v)?`<button data-a="del" data-i="${v.id}" aria-label="លុប">🗑</button>`:""}</div><div class="rc"><b>@${esc(v.ch)}</b><div>${esc(v.t)}</div><div style="font-size:12px;opacity:.85">👁 ${fmt(vcount(v))} · ${dstr(tsOf(v))}</div></div></section>`).join("")}</div>`;
+}
+function reelsInit(){
+ const rl=$("#rl");if(!rl)return;
+ const io=new IntersectionObserver(es=>es.forEach(e=>{const v=e.target.querySelector("video");if(!v)return;if(e.isIntersecting){bump("v"+e.target.dataset.id);v.play().catch(()=>{})}else v.pause()}),{root:rl,threshold:.65});
+ rl.querySelectorAll(".reel").forEach(r=>io.observe(r));
+}
+function photos(){
+ const l=all().filter(v=>v.k==="photo").reverse();
+ return `<div class="row" style="margin-bottom:12px"><h2>រូបថត</h2><button class="pill on" data-a="up">＋ បង្ហោះ</button></div>`+grid(l,"មិនទាន់មានរូបថតទេ។ ចុច ＋ ដើម្បីបង្ហោះ។","ph",p=>`<button class="ph-t" data-ph="${p.id}">${locked(p)?`<div class="ph0" style="font-size:22px">🔒<small>🪙${price(p)}</small></div>`:`<img src="${esc(src(p))}" alt="${esc(p.t)}">`}</button>`);
+}
+function watch(){
+ const v=all().find(x=>x.id===V.cur);if(!v)return home();
+ const u=U(),cm=S.cm[v.id]||[];
+ return `<div class="watch"><section>${player(v)}<div class="s" id="msc" style="margin-top:6px"></div>
+ <h1>${esc(v.t)}</h1>
+ <div class="row"><div class="cm" style="margin:0">${av(v.ch)}<b>${esc(v.ch)}</b>${own(v)?"":`<button class="sub ${u.subs.includes(v.ch)?"on":""}" data-a="sub" data-i="${esc(v.ch)}">${u.subs.includes(v.ch)?"បានតាមដាន":"តាមដាន"}</button>`}</div>
+ <div class="act"><button class="pill ${u.likes.includes(v.id)?"on":""}" data-a="like" data-i="${v.id}">♥ ចូលចិត្ត</button><button class="pill ${u.later.includes(v.id)?"on":""}" data-a="later" data-i="${v.id}">⏱ មើលពេលក្រោយ</button><button class="pill" data-a="share" data-i="${v.id}">ចែករំលែក</button>${((v.local||v.kind==="mp4"||v.kind==="audio")&&!locked(v))?`<button class="pill" data-a="vdl" data-i="${v.id}">⬇ ទាញយក</button>`:""}${(own(v)&&v.k!=="audio")?`<button class="pill" data-a="edit" data-i="${v.id}">✂ កាត់ត</button>`:""}${own(v)?`<button class="pill" data-a="del" data-i="${v.id}">លុប</button>`:""}</div></div>
+ <div class="s" style="margin:4px 0 8px">👁 ${fmt(vcount(v))} ដងមើល · 📅 ${dstr(tsOf(v))} · 💬 ${cm.length} មតិ · ↗ ${(S.sh||{})["v"+v.id]||0} ចែករំលែក${price(v)?" · "+priceTxt(v):""}</div>${v.x?`<div class="desc"><p>${esc(v.x)}</p></div>`:""}
+ ${((v.yt||v.link)&&!locked(v))?(()=>{const L=v.link||"https://youtu.be/"+v.yt,u=encodeURIComponent(L),t=encodeURIComponent(v.t);return `<div class="act" style="margin:10px 0"><a class="pill" target="_blank" rel="noopener" href="${esc(L)}">🔗 បើកដើម</a><a class="pill" target="_blank" rel="noopener" href="https://www.facebook.com/sharer/sharer.php?u=${u}">Facebook</a><a class="pill" target="_blank" rel="noopener" href="https://t.me/share/url?url=${u}&text=${t}">Telegram</a><a class="pill" target="_blank" rel="noopener" href="https://x.com/intent/tweet?url=${u}&text=${t}">X</a>${v.my?`<button class="pill" data-a="ytdel" data-i="${v.id}">លុប</button>`:""}</div>`})():""}
+ <h3 style="margin-top:14px">មតិ ${cm.length}</h3>
+ <div class="cmi"><input id="ci" placeholder="សរសេរមតិ..." aria-label="មតិ"><button class="pill on" data-a="cmt" data-i="${v.id}">ផ្ញើ</button></div>
+ ${cm.map(c=>`<div class="cm top">${av(c.n)}<div><b>${esc(c.n)}</b><div>${esc(c.t)}</div></div></div>`).join("")}
+ </section><aside>${all().filter(x=>x.id!==v.id&&(x.k==="video"||x.k==="movie")).map(x=>`<button class="rel" data-v="${x.id}">${vid(x)}<div><div class="t">${esc(x.t)}</div><div class="s">${esc(x.ch)}</div></div></button>`).join("")}</aside></div>`;
+}
+function wallet(){
+ if(!S.user)return `<div class="empty"><p style="margin-bottom:14px">ចូលគណនីដើម្បីប្រើបេសកកម្ម និងហាង។</p><button class="pill on" data-a="in">ចូលគណនី</button></div>`;
+ const u=U(),m=mis(),ready=m.sec>=GOAL,got=m.c===today(),us=used(),lm=lim();
+ const sc=Math.min(m.sec,GOAL),pr=`${Math.floor(sc/60)}:${String(sc%60).padStart(2,"0")} / ${GOAL/60}:00`;
+ return `<div class="wal">
+ <div class="box"><div class="row"><h3>🪙 ${u.coins} កាក់</h3><span class="s">ក្រេឌីត ${esc(AI_NAME)}៖ ${u.ai}</span></div><div class="s" style="margin-top:6px">ចំណូលពីការលក់មាតិកា៖ 🪙 ${u.earn||0}</div></div>
+ <div class="box"><h3>បេសកកម្មប្រចាំថ្ងៃ</h3>
+ <p class="s">មើលវីដេអូ Reels ឬវីដេអូតាមតំណ ឲ្យគ្រប់ ${GOAL/60} នាទីក្នុងមួយថ្ងៃ ដើម្បីទទួលកាក់។ ចប់ថ្ងៃទី ៧ ត្រឡប់ទៅថ្ងៃទី ១ វិញ។</p>
+ <div class="days">${REW.map((r,i)=>`<div class="day ${i+1<m.day?"ok":i+1===m.day?"cur":""}"><small>ថ្ងៃ ${i+1}</small><b>🪙${r}</b></div>`).join("")}</div>
+ <div class="bar2"><i style="width:${Math.min(100,m.sec/GOAL*100)}%"></i></div>
+ <div class="row" style="margin-top:10px"><span class="s">${got?"បានទទួលកាក់ថ្ងៃនេះហើយ។ ត្រឡប់មកថ្ងៃស្អែក។":pr}</span><button class="pill on" data-a="claim" ${ready&&!got?"":"disabled"}>ទទួល 🪙${REW[m.day-1]}</button></div></div>
+ ${lmBox()}
+ <div class="box"><h3>Data ${FREE+u.gb} GB</h3><div class="bar2"><i style="width:${Math.min(100,us/lm*100)}%"></i></div>
+ <p class="s" style="margin-top:6px">ប្រើប្រាស់ ${fmtB(us)} / ${fmtB(lm)} សម្រាប់វីដេអូ និងរូបថតដែលបង្ហោះ</p>
+ <div class="shop">${DATA.map((p,i)=>`<button class="pill" data-a="buy" data-k="d" data-i="${i}">+${p[0]} GB · 🪙${p[1]}</button>`).join("")}</div></div>
+ <div class="box"><h3>✨ ${esc(AI_NAME)}</h3><p class="s">ឧបករណ៍កាត់តរូបថត (ពន្លឺ ពណ៌ កាត់ទំហំ បង្វិល) និងកាត់វីដេអូ។ ១ ក្រេឌីត = ១ ដងរក្សាទុក។ ចុច ✂ លើវីដេអូ ឬរូបថតរបស់អ្នក។</p>
+ <div class="shop">${AIP.map((p,i)=>`<button class="pill" data-a="buy" data-k="a" data-i="${i}">${p[0]} ក្រេឌីត · 🪙${p[1]}</button>`).join("")}</div></div>
+ <div class="box"><h3>ការកំណត់</h3><div class="act" style="margin-top:8px"><button class="pill" data-a="theme">◐ ងងឹត/ភ្លឺ</button><button class="pill" data-a="h12">ម៉ោង ${S.h12?"12 → 24":"24 → 12"}</button></div></div></div>`;
+}
+const TABS=[["up","ការបង្ហោះរបស់ខ្ញុំ"],["hist","ប្រវត្តិ"],["likes","ចូលចិត្ត"],["later","មើលពេលក្រោយ"],["subs","ឆានែល"],["feed","📰 Feed ខ្ញុំ"],["docs","ឯកសារ/ប្លុក"]];
+const qpBar=()=>`<div class="act" style="margin-bottom:12px"><button class="pill" data-a="upk" data-k="video">🎬 វីដេអូ</button><button class="pill" data-a="upk" data-k="movie">🍿 ភាពយន្ត</button><button class="pill" data-a="upk" data-k="reel">▶ Reels</button><button class="pill" data-a="upk" data-k="photo">🖼 រូបថត</button><button class="pill" data-a="upk" data-k="audio" data-cat="music">🎵 តន្ត្រី</button><button class="pill" data-a="upk" data-k="video" data-cat="game">🎮 ហ្គេម</button><button class="pill" data-a="upk" data-k="video" data-cat="place">📍 កន្លែង</button><button class="pill" data-a="upk" data-k="video" data-cat="cartoon">🧸 តុក្កតា</button><button class="pill on" data-a="yadd">＋ តំណ</button></div>`;
+function you(){
+ if(!S.user)return `<div class="empty"><p style="margin-bottom:14px">ចូលគណនីដើម្បីបង្ហោះ ចូលចិត្ត តាមដាន និងសរសេរមតិ។</p><button class="pill on" data-a="in">ចូលគណនី</button></div>`;
+ const u=U(),vs=a=>a.map(i=>all().find(v=>v.id===i)).filter(Boolean);
+ let body;
+ if(V.tab==="up")body=qpBar()+grid(all().filter(own).reverse(),"អ្នកមិនទាន់បានបង្ហោះអ្វីទេ។ ចុច ＋ ដើម្បីចាប់ផ្តើម។","",x=>x.k==="photo"?`<button class="card" data-ph="${x.id}"><div class="th"><img src="${esc(src(x))}" alt=""></div><div class="t" style="margin-top:6px">${esc(x.t)}</div></button>`:card(x));
+ else if(V.tab==="hist")body=grid(vs(u.hist),"អ្នកមិនទាន់បានមើលវីដេអូណាទេ។");
+ else if(V.tab==="likes")body=grid(vs(u.likes),"ចុច ♥ លើវីដេអូដើម្បីរក្សាទុកនៅទីនេះ។");
+ else if(V.tab==="later")body=grid(vs(u.later),"មិនមានវីដេអូក្នុងបញ្ជីមើលពេលក្រោយទេ។");
+ else if(V.tab==="feed")body=feedMine();
+  else if(V.tab==="docs")body=docsList(u);
+ else body=u.subs.length?u.subs.map(c=>`<div class="cm">${av(c)}<b style="flex:1">${esc(c)}</b><button class="sub on" data-a="sub" data-i="${esc(c)}">បានតាមដាន</button></div>`).join("")+`<h3 style="margin:16px 0 10px">វីដេអូថ្មីៗ</h3>`+grid(all().filter(v=>u.subs.includes(v.ch)&&v.k!=="photo"),""):`<div class="empty">អ្នកមិនទាន់បានតាមដានឆានែលណាទេ។</div>`;
+ return `<div class="chead">${av(S.user.name,S.user.pic,"big")}<div><h2>${esc(S.user.name)}</h2><div class="s">${esc(S.user.email||"គណនីក្នុងឧបករណ៍")}</div><div class="act" style="margin-top:8px"><button class="pill on" data-a="up">＋ បង្ហោះ</button><button class="pill" data-a="guide">🤖 ជំនួយការ</button><button class="pill on" data-a="newdoc">✍ សរសេរប្លុក/CV</button><button class="pill" data-p="wallet">🪙 រង្វាន់ និងហាង</button><button class="pill" data-p="security">🛡 សុវត្ថិភាព</button><button class="pill" data-a="out">ចាកចេញ</button></div></div></div>
+ <div class="tabs">${TABS.map(([k,n])=>`<button class="pill ${V.tab===k?"on":""}" data-t="${k}">${n}</button>`).join("")}</div>`+body;
+}
+function render(){
+ renderNav();
+ const m=$("#app");
+ m.className=V.page==="reels"?"rm":"";
+ $("#sbar").hidden=V.page==="reels";
+ m.innerHTML=({home,movies,reels,photos,watch,you,wallet,social,security,study}[V.page]||home)();
+ if(V.page==="reels")reelsInit();
+ feedInit();
+ if(V.page==="home"&&V.cat==="tv"&&!V.q)tvInit();else tvStop();
+}
+function go(p){if(p==="study"){V.cat="study";p="home"}V.page=p;render();window.scrollTo(0,0)}
+function rr(){const p=$("#pl"),t=p?p.currentTime:0;render();const q=$("#pl");if(q&&t)q.currentTime=t}
+function open(id){
+ V.cur=id;bump("v"+id);
+ if(S.user){const u=U();u.hist=[id].concat(u.hist.filter(i=>i!==id)).slice(0,50);save()}
+ go("watch");
+}
+const tg=(a,x)=>{const i=a.indexOf(x);i<0?a.push(x):a.splice(i,1);save()};
+const need=()=>S.user?true:(openIn(),false);
+function lb(id){
+ const v=all().find(x=>x.id===id);if(!v)return;
+ if(locked(v)){if(confirm("🔒 រូបថតនេះតម្លៃ 🪙 "+price(v)+" កាក់។ បង់ដើម្បីមើល?")&&unlock("v"+v.id,v))lb(id);return}
+ $("#lbi").src=src(v);$("#lbt").textContent=v.t;
+ const d=$("#lbd"),e=$("#lbe");d.hidden=e.hidden=!own(v);d.dataset.i=e.dataset.i=v.id;$("#lb").showModal();
+}
+function login(u){const nu=!S.u[u.id];S.user=u;if(nu)U().seen=Date.now();save();$("#din").close();render();if(nu)setTimeout(()=>openGuide(true),350)}
+function openIn(){$("#din").showModal();initGoogle()}
+let gOK=false;
+function initGoogle(){
+ if(!GOOGLE_CLIENT_ID){$("#gnote").hidden=false;return}
+ const go_=()=>{
+  if(gOK)return;gOK=true;
+  google.accounts.id.initialize({client_id:GOOGLE_CLIENT_ID,callback:r=>{
+   try{const p=JSON.parse(decodeURIComponent(escape(atob(r.credential.split(".")[1].replace(/-/g,"+").replace(/_/g,"/")))));
+   login({id:"g:"+p.sub,name:p.name,email:p.email,pic:p.picture})}catch(e){}
+  }});
+  google.accounts.id.renderButton($("#gbtn"),{theme:"outline",size:"large",width:260});
+ };
+ if(window.google&&google.accounts)return go_();
+ const s=document.createElement("script");s.src="https://accounts.google.com/gsi/client";s.onload=go_;
+ s.onerror=()=>{$("#gnote").hidden=false;$("#gnote").textContent="មិនអាចភ្ជាប់ Google បានទេ។ សូមពិនិត្យអ៊ីនធឺណិត។"};
+ document.head.appendChild(s);
+}
+const dur=u=>new Promise(r=>{const v=document.createElement("video");v.preload="metadata";v.onloadedmetadata=()=>{const s=Math.round(v.duration||0);r(s?Math.floor(s/60)+":"+String(s%60).padStart(2,"0"):"")};v.onerror=()=>r("");setTimeout(()=>r(""),4000);v.src=u});
+
+function tick(){
+ const n=new Date(),p=x=>String(x).padStart(2,"0"),h=n.getHours();
+ const t24=`${p(h)}:${p(n.getMinutes())}:${p(n.getSeconds())}`,t12=`${h%12||12}:${p(n.getMinutes())}:${p(n.getSeconds())} ${h<12?"AM":"PM"}`;
+ let d;try{d=n.toLocaleDateString("km-KH",{day:"numeric",month:"short",year:"numeric"})}catch(e){d=n.toDateString()}
+ $("#clk").innerHTML=`<b>${S.h12?t12:t24}</b><small>${S.h12?t24:t12}</small><small>${esc(d)}</small>`;
+}
+function toast(m){const t=$("#toast");t.textContent=m;t.hidden=false;clearTimeout(toast.t);toast.t=setTimeout(()=>t.hidden=true,2800)}
+function theme(){
+ const r=document.documentElement,d=r.dataset.theme==="dark"||(!r.dataset.theme&&matchMedia("(prefers-color-scheme:dark)").matches);
+ r.dataset.theme=d?"light":"dark";
+}
+let ED=null;
+async function addMine(blob,k,t){
+ const m=$("#dem");
+ if(used()+blob.size>lim()){m.textContent="Data ពេញ។ សូមទិញដាតាបន្ថែមក្នុងទំព័ររង្វាន់។";return false}
+ const id=Date.now();
+ try{await put(id,blob)}catch(e){m.textContent="រក្សាទុកមិនបាន";return false}
+ URLS[id]=URL.createObjectURL(blob);
+ S.mine.push({id,k,t,ch:S.user.name,o:S.user.id,local:1,v:0,x:"",d:k==="photo"?"":await dur(URLS[id]),sz:blob.size});
+ U().ai--;save();return true;
+}
+function evl(){const a=+$("#e1").value,b=+$("#e2").value;$("#evl").textContent=`${a}s → ${b}s (${Math.max(0,b-a)}s)`}
+function openEd(id){
+ const v=all().find(x=>x.id===id);if(!v||!own(v))return;
+ if(U().ai<1){toast("អ្នកគ្មានក្រេឌីត "+AI_NAME+"។ សូមទិញក្នុងទំព័ររង្វាន់");return go("wallet")}
+ ED={v,rot:0};const ph=v.k==="photo";
+ $("#dep").hidden=!ph;$("#dev").hidden=ph;$("#dem").textContent="";
+ $("#det").textContent=`✨ ${AI_NAME} · ក្រេឌីត ${U().ai}`;
+ $("#eb").value=$("#ec").value=$("#es").value=100;$("#ef").value="n";$("#ek").value="0";
+ if(ph){const im=new Image();im.onload=()=>{ED.im=im;drawEd()};im.src=src(v)}
+ else{const p=$("#evp");p.src=src(v);p.onloadedmetadata=()=>{const d=Math.floor(p.duration||0);$("#e1").max=$("#e2").max=d;$("#e1").value=0;$("#e2").value=d;evl()}}
+ $("#de").showModal();
+}
+function drawEd(){
+ const e=ED;if(!e||!e.im)return;
+ const im=e.im,r=e.rot%2,w=r?im.height:im.width,h=r?im.width:im.height,k=$("#ek").value;
+ let cw=w,ch=h;
+ if(k!=="0"){const [a,b]=k.split(":").map(Number),ar=a/b;if(w/h>ar)cw=h*ar;else ch=w/ar}
+ const c=$("#ecv");c.width=Math.round(cw);c.height=Math.round(ch);
+ const x=c.getContext("2d");
+ const P={n:"",bw:"grayscale(1)",sp:"sepia(.8)",wm:"sepia(.25) saturate(1.3) hue-rotate(-10deg)",cl:"saturate(1.1) hue-rotate(15deg) brightness(1.03)"}[$("#ef").value]||"";
+ x.filter=`brightness(${$("#eb").value}%) contrast(${$("#ec").value}%) saturate(${$("#es").value}%) ${P}`;
+ x.translate(c.width/2,c.height/2);x.rotate(e.rot*Math.PI/2);x.drawImage(im,-im.width/2,-im.height/2);
+}
+function savePhoto(){
+ $("#ecv").toBlob(async b=>{
+  if(!b)return;
+  if(await addMine(b,"photo",ED.v.t+" (កាត់ត)")){$("#de").close();go("photos")}
+ },"image/jpeg",.92);
+}
+function exportVid(){
+ const p=$("#evp"),s=+$("#e1").value,en=+$("#e2").value,m=$("#dem"),kk=ED.v.k,tt=ED.v.t+" (កាត់ត)";
+ if(!(en>s)){m.textContent="ចុងត្រូវធំជាងចាប់ផ្តើម";return}
+ if(!p.captureStream||!window.MediaRecorder){m.textContent="ឧបករណ៍នេះមិនគាំទ្រការកាត់វីដេអូទេ";return}
+ const ch=[];let rec;
+ try{rec=new MediaRecorder(p.captureStream())}catch(x){m.textContent="មិនអាចកាត់បានទេ";return}
+ rec.ondataavailable=ev=>{if(ev.data.size)ch.push(ev.data)};
+ rec.onstop=async()=>{
+  p.pause();
+  if(await addMine(new Blob(ch,{type:rec.mimeType||"video/webm"}),kk,tt)){$("#de").close();go(kk==="reel"?"reels":kk==="movie"?"movies":"home")}
+ };
+ m.textContent="កំពុងកាត់... សូមរង់ចាំប្រហែល "+Math.round(en-s)+" វិនាទី";
+ const run=()=>{rec.start();p.play();const iv=setInterval(()=>{if(p.currentTime>=en||p.ended){clearInterval(iv);rec.stop()}},100)};
+ if(Math.abs(p.currentTime-s)<.1)run();else{p.onseeked=()=>{p.onseeked=null;run()};p.currentTime=s}
+}
+["eb","ec","es","ef","ek"].forEach(i=>$("#"+i).addEventListener("input",drawEd));
+["e1","e2"].forEach(i=>$("#"+i).addEventListener("input",evl));
+$("#dok").onclick=()=>{if(ED)ED.v.k==="photo"?savePhoto():exportVid()};
+$("#de").addEventListener("close",()=>{$("#evp").pause();ED=null});
+$("#clk").onclick=()=>{S.h12=!S.h12;save();tick()};
+
+const mmss=n=>Math.floor(n/60)+":"+String(n%60).padStart(2,"0");
+let EP=false,EMB={src:"",touched:false,api:false};
+function embHook(f){
+ try{
+  const k=f.dataset.pk,w=f.contentWindow;
+  if(k==="yt"){
+   w.postMessage(JSON.stringify({event:"listening",id:1,channel:"widget"}),"*");
+   w.postMessage(JSON.stringify({event:"command",func:"addEventListener",args:["onStateChange"],id:1,channel:"widget"}),"*");
+  }else if(k==="vm"){
+   ["play","pause","finish"].forEach(e=>w.postMessage(JSON.stringify({method:"addEventListener",value:e}),"*"));
+  }
+ }catch(e){}
+}
+addEventListener("message",e=>{
+ const f=document.querySelector("iframe.player");if(!f||e.source!==f.contentWindow)return;
+ let d=e.data;if(typeof d==="string"){try{d=JSON.parse(d)}catch(x){return}}
+ if(!d||typeof d!=="object"||typeof d.event!=="string")return;
+ if(e.origin==="https://www.youtube-nocookie.com"||e.origin==="https://www.youtube.com"){
+  EMB.api=true;
+  const st=d.event==="onStateChange"?d.info:(d.event==="infoDelivery"&&d.info&&typeof d.info.playerState==="number")?d.info.playerState:undefined;
+  if(typeof st==="number")EP=st===1;
+ }else if(e.origin==="https://player.vimeo.com"){
+  EMB.api=true;
+  if(d.event==="play")EP=true;else if(d.event==="pause"||d.event==="finish")EP=false;
+ }
+});
+function lmBox(){
+ const l=lmis(),ready=l.sec>=LGOAL,got=l.c===today();
+ return `<div class="box"><h3>🔗 បេសកកម្មតំណ</h3><p class="s">មើលវីដេអូតាមតំណ (YouTube, Vimeo, Facebook, TikTok, Spotify ឬតំណ .mp4/.mp3) ឲ្យគ្រប់ ${LGOAL/60} នាទីក្នុងមួយថ្ងៃ ដើម្បីទទួលកាក់បន្ថែម 🪙${LREW}។</p><div class="bar2"><i style="width:${Math.min(100,l.sec/LGOAL*100)}%"></i></div><div class="row" style="margin-top:10px"><span class="s">${got?"បានទទួលថ្ងៃនេះហើយ។ ត្រឡប់មកថ្ងៃស្អែក។":mmss(Math.min(l.sec,LGOAL))+" / "+mmss(LGOAL)}</span><button class="pill on" data-a="lclaim" ${ready&&!got?"":"disabled"}>ទទួល 🪙${LREW}</button></div></div>`;
+}
+let WU="";
+document.addEventListener("click",e=>{
+ const a=e.target.closest("a[target=_blank]");if(!a||a.id==="dwo")return;
+ let h;try{h=new URL(a.href)}catch(x){return}
+ if(h.protocol!=="https:"){e.preventDefault();toast("⛔ បានទប់ស្កាត់តំណដែលមិនមែន https");return}
+ if((S.trust||[]).includes(h.hostname))return;
+ e.preventDefault();WU=a.href;$("#dwh").textContent=h.hostname;$("#dwr").checked=false;$("#dwo").href=WU;$("#dw").showModal();
+},true);
+$("#dwo").addEventListener("click",()=>{
+ if($("#dwr").checked){try{const h=new URL(WU).hostname;S.trust=(S.trust||[]).concat(h);save()}catch(x){}}
+ $("#dw").close();
+});
+const LANGS={zh:{n:"中文 · ចិន",tts:"zh-CN"},km:{n:"ខ្មែរ",tts:"km-KH"},en:{n:"English · អង់គ្លេស",tts:"en-US"}};
+const LES={
+ zh:[["你好","nǐ hǎo","សួស្តី"],["谢谢","xièxie","អរគុណ"],["再见","zàijiàn","លាសិនហើយ"],["对不起","duìbuqǐ","សុំទោស"],["我叫……","wǒ jiào …","ខ្ញុំឈ្មោះ …"],["多少钱？","duōshao qián?","តម្លៃប៉ុន្មាន?"],["吃饭了吗？","chī fàn le ma?","ញ៉ាំបាយហើយឬនៅ?"],["我不懂","wǒ bù dǒng","ខ្ញុំមិនយល់ទេ"],["一 二 三 四 五","yī èr sān sì wǔ","មួយ ពីរ បី បួន ប្រាំ"],["请问","qǐngwèn","សូមសួរ"]],
+ km:[["សួស្តី","suostei","Hello"],["អរគុណ","arkun","Thank you"],["សូមទោស","som toh","Sorry / Excuse me"],["ខ្ញុំឈ្មោះ …","khnhom chmuoh …","My name is …"],["ថ្លៃប៉ុន្មាន?","thlai ponman?","How much?"],["បាទ / ចាស","bat / chas","Yes (male / female)"],["ទេ","te","No"],["ខ្ញុំមិនយល់ទេ","khnhom min yol te","I don't understand"],["ជួយខ្ញុំផង","chuoy khnhom phong","Please help me"],["ក ខ គ ឃ ង ច ឆ ជ ឈ ញ","","ព្យញ្ជនៈ ១០ ដំបូង (first 10 consonants)"]],
+ en:[["Hello","","សួស្តី"],["Thank you","","អរគុណ"],["Goodbye","","លាសិនហើយ"],["How are you?","","សុខសប្បាយទេ?"],["My name is …","","ខ្ញុំឈ្មោះ …"],["How much is this?","","នេះថ្លៃប៉ុន្មាន?"],["I don't understand","","ខ្ញុំមិនយល់ទេ"],["Where is the toilet?","","បន្ទប់ទឹកនៅឯណា?"],["Please speak slowly","","សូមនិយាយយឺតៗ"],["Nice to meet you","","រីករាយដែលបានជួប"]]
+};
+function say(t,l){
+ if(!window.speechSynthesis){toast("ឧបករណ៍នេះមិនគាំទ្រការអានសំឡេងទេ");return}
+ const u=new SpeechSynthesisUtterance(t.replace(/…+/g,"").replace(/\s*\?$/,""));u.lang=l;
+ speechSynthesis.cancel();speechSynthesis.speak(u);
+}
+function postCard(p){
+ const me_=S.user&&S.user.id,liked=(p.likes||[]).includes(me_),mine=me_&&p.uid===me_,im=p.imgs||[],cm=p.cm||[];
+ return `<div class="box"><div class="cm" style="margin:0 0 8px">${av(p.by)}<div style="flex:1"><b>${esc(p.by)}</b><div class="s">${ago(p.ts)} · 📅 ${dstr(p.ts)}</div></div>${mine?`<button class="pill" data-a="pdel" data-i="${p.id}">លុប</button>`:""}</div>
+ ${p.t?`<p style="white-space:pre-wrap;overflow-wrap:anywhere">${esc(p.t)}</p>`:""}
+ ${im.length?`<div class="pimg n${Math.min(im.length,4)}">${im.map(m=>`<button data-ph2="${m.id}" aria-label="រូបថត"><img src="${esc(URLS[m.id]||"")}" alt=""></button>`).join("")}</div>`:""}
+ <div class="act" style="margin-top:8px"><button class="pill ${liked?"on":""}" data-a="plike" data-i="${p.id}">♥ ${(p.likes||[]).length}</button><button class="pill" data-a="pcm" data-i="${p.id}">💬 ${cm.length}</button><button class="pill" data-a="pshare" data-i="${p.id}">↗ ${(S.sh||{})["p"+p.id]||0}</button></div>
+ ${cm.slice(-3).map(c=>`<div class="s" style="margin-top:6px"><b>${esc(c.n)}</b> ${esc(c.t)}</div>`).join("")}</div>`;
+}
+function study(){
+ const tab=V.st||"les";
+ let h=`<div class="wal"><div class="chips" ${tab==="tr"?"hidden":""}>${Object.entries(LANGS).map(([k,x])=>`<button data-l="${k}" class="${V.lang===k?"on":""}">${x.n}</button>`).join("")}</div>
+ <div class="tabs"><button class="pill ${tab==="les"?"on":""}" data-st="les">📖 មេរៀន</button><button class="pill ${tab==="post"?"on":""}" data-st="post">💬 សារ/ប្រកាស</button><button class="pill ${tab==="tr"?"on":""}" data-st="tr">🌐 បកប្រែ</button></div>`;
+ if(tab==="les"){
+  h+=`<div class="box"><h3>${LANGS[V.lang].n}</h3><p class="s">ចុច 🔊 ដើម្បីស្តាប់ (ត្រូវការសំឡេងអានរបស់ឧបករណ៍)។</p>`+LES[V.lang].map((r,i)=>`<div class="res"><div style="flex:1;min-width:0"><div class="lw">${esc(r[0])}</div>${r[1]?`<div class="s">${esc(r[1])}</div>`:""}<div>${esc(r[2])}</div></div><button class="pill" data-a="say" data-i="${i}" aria-label="ស្តាប់">🔊</button></div>`).join("")+`</div>`;
+ }else if(tab==="tr"){h+=trView();
+ }else{
+  const ps=(S.posts||[]).filter(p=>p.lang===V.lang);
+  h+=`<div class="box"><textarea id="pt" class="ta" rows="3" maxlength="1000" placeholder="សរសេរសារអំពីការសិក្សា ${esc(LANGS[V.lang].n)}...">${esc(V.draft||"")}</textarea>
+  <div class="row" style="margin-top:8px"><div class="act"><label class="pill" for="pf" style="cursor:pointer">📷 រូបថតពីទូរស័ព្ទ</label></div><button class="pill on" data-a="post">ផុស</button></div>
+  <div class="pv" id="ppv"></div><input type="file" id="pf" accept="image/*" multiple hidden></div>`
+  +(ps.length?ps.map(postCard).join(""):`<div class="empty">មិនទាន់មានសារទេ។ សរសេរសារដំបូងរបស់អ្នក!</div>`);
+ }
+ return h+`</div>`;
+}
+async function shrink(f){
+ try{
+  const bm=await createImageBitmap(f),k=Math.min(1,1600/Math.max(bm.width,bm.height));
+  if(k===1&&f.size<800000)return f;
+  const c=document.createElement("canvas");c.width=Math.max(1,Math.round(bm.width*k));c.height=Math.max(1,Math.round(bm.height*k));
+  c.getContext("2d").drawImage(bm,0,0,c.width,c.height);
+  return await new Promise(r=>c.toBlob(b=>r(b&&b.size<f.size?b:f),"image/jpeg",.85));
+ }catch(e){return f}
+}
+async function doPost(){
+ if(!need())return;
+ const t=(($("#pt")||{}).value||"").trim(),fs=V.pfiles||[],imgs=[];
+ if(!t&&!fs.length){toast("សរសេរសារ ឬជ្រើសរូបថតជាមុន");return}
+ const undo=()=>imgs.forEach(m=>{drop(m.id);if(URLS[m.id]){URL.revokeObjectURL(URLS[m.id]);delete URLS[m.id]}});
+ try{
+  for(const f of fs){
+   const b=await shrink(f);
+   if(used()+imgs.reduce((a,m)=>a+m.sz,0)+b.size>lim()){undo();toast("Data ពេញ។ សូមទិញដាតាបន្ថែមក្នុងទំព័ររង្វាន់");return}
+   const id=Date.now()+imgs.length+1;await put(id,b);URLS[id]=URL.createObjectURL(b);imgs.push({id,sz:b.size});
+  }
+ }catch(e){undo();toast("រក្សាទុករូបថតមិនបាន");return}
+ const p={id:Date.now(),lang:V.lang,uid:S.user.id,by:S.user.name,t,imgs,ts:Date.now(),likes:[],cm:[]};
+ S.posts=[p].concat(S.posts||[]);
+ note({id:p.id,k:"post",t:t.slice(0,60)||"រូបថត",lang:p.lang});
+ V.draft="";V.pfiles=[];save();render();toast("✅ បានផុស");
+}
+function lb2(id){const u=URLS[id];if(!u)return;$("#lbi").src=u;$("#lbt").textContent="";$("#lbd").hidden=$("#lbe").hidden=true;$("#lb").showModal()}
+document.addEventListener("input",e=>{if(e.target.id==="pt")V.draft=e.target.value;if(e.target.id==="ft")V.fdraft=e.target.value;if(e.target.id==="trs")V.trs=e.target.value;if(e.target.id==="tvq"){V.tvq=e.target.value;V.tvn=60;tvList()}});
+let PVU=[];
+document.addEventListener("change",e=>{
+ if(e.target.id!=="pf")return;
+ PVU.forEach(u=>URL.revokeObjectURL(u));PVU=[];
+ const ok=[];
+ for(const f of [...e.target.files].slice(0,4)){const b=chk(f,"photo");if(b){toast(b);continue}ok.push(f)}
+ V.pfiles=ok;
+ const box=$("#ppv");if(!box)return;
+ box.innerHTML=ok.map(f=>{const u=URL.createObjectURL(f);PVU.push(u);return `<img src="${u}" alt="">`}).join("");
+});
+/* ===== បកប្រែ ខ្មែរ → ១៦ ភាសា ===== */
+const TRL=[["en","🇬🇧","English","en-US"],["zh-CN","🇨🇳","中文","zh-CN"],["vi","🇻🇳","Tiếng Việt","vi-VN"],["lo","🇱🇦","ລາວ","lo-LA"],["ja","🇯🇵","日本語","ja-JP"],["ko","🇰🇷","한국어","ko-KR"],["fr","🇫🇷","Français","fr-FR"],["de","🇩🇪","Deutsch","de-DE"],["es","🇪🇸","Español","es-ES"],["ru","🇷🇺","Русский","ru-RU"],["id","🇮🇩","Indonesia","id-ID"],["ms","🇲🇾","Melayu","ms-MY"],["hi","🇮🇳","हिन्दी","hi-IN"],["ar","🇸🇦","العربية","ar-SA"],["pt","🇧🇷","Português","pt-BR"],["it","🇮🇹","Italiano","it-IT"]];
+const TRK=["km","🇰🇭","ខ្មែរ","km-KH"];
+const trTargets=()=>V.trsrc==="en"?[TRK].concat(TRL.filter(x=>x[0]!=="en")):TRL;
+function trView(){
+ const en=V.trsrc==="en",T=trTargets();
+ return `<div class="box"><h3>🌐 បកប្រែ ${en?"English":"ខ្មែរ"} → ១៦ ភាសា</h3>
+ <div class="act" style="margin:6px 0"><button class="pill ${en?"":"on"}" data-a="trsrc" data-k="km">🇰🇭 ខ្មែរ → ១៦</button><button class="pill ${en?"on":""}" data-a="trsrc" data-k="en">🇬🇧 English → ១៦</button></div>
+ <p class="s">វាយអត្ថបទជាភាសា${en?"អង់គ្លេស":"ខ្មែរ"} រួចជ្រើសភាសា។ ត្រូវការអ៊ីនធឺណិត។ អត្ថបទត្រូវបានផ្ញើទៅសេវាបកប្រែ MyMemory (ឥតគិតថ្លៃ មានដែនកំណត់ប្រចាំថ្ងៃ) ហើយការបកប្រែអាចមិនត្រឹមត្រូវ ១០០%។</p>
+ <textarea id="trs" class="ta" rows="4" maxlength="600" placeholder="${en?"Type English text here...":"វាយអត្ថបទខ្មែរនៅទីនេះ..."}">${esc(V.trs||"")}</textarea>
+ <div class="row" style="margin-top:8px;gap:8px"><select id="trl" class="sel" style="flex:1"><option value="all">ទាំង ១៦ ភាសា</option>${T.map(x=>`<option value="${x[0]}" ${V.trl===x[0]?"selected":""}>${x[1]} ${x[2]}</option>`).join("")}</select><button class="pill on" data-a="trgo">បកប្រែ</button></div></div>
+ <div id="trr">${trHtml()}</div>`;
+}
+function trHtml(){
+ const r=(V.trres||[]).slice().sort((a,b)=>TRL.findIndex(x=>x[0]===a.code)-TRL.findIndex(x=>x[0]===b.code));
+ if(V.trbusy&&!r.length)return `<p class="s">កំពុងបកប្រែ...</p>`;
+ return r.map(x=>`<div class="box"><div class="s">${x.flag} ${esc(x.name)}</div>${x.txt!==null?`<div class="lw" style="white-space:pre-wrap;overflow-wrap:anywhere">${esc(x.txt)}</div><div class="act" style="margin-top:8px"><button class="pill" data-a="trsay" data-k="${x.code}">🔊</button><button class="pill" data-a="trcp" data-k="${x.code}">⧉ ចម្លង</button></div>`:`<div class="s">⚠️ បកប្រែមិនបាន៖ ${esc(x.err||"")}</div>`}</div>`).join("");
+}
+function chunks(t){
+ const enc=new TextEncoder(),parts=t.split(/(?<=[។៕.!?\n])/),out=[];let cur="";
+ for(const p of parts){
+  if(enc.encode(p).length>400){if(cur.trim())out.push(cur);cur="";for(let i=0;i<p.length;i+=120)out.push(p.slice(i,i+120));continue}
+  if(cur&&enc.encode(cur+p).length>400){out.push(cur);cur=""}
+  cur+=p;
+ }
+ if(cur.trim())out.push(cur);
+ return out;
+}
+async function trOne(text,to,from){
+ const out=[];
+ for(const c of chunks(text)){
+  if(!c.trim())continue;
+  const ac=new AbortController(),tm=setTimeout(()=>ac.abort(),15000);
+  try{
+   const r=await fetch("https://api.mymemory.translated.net/get?q="+encodeURIComponent(c)+"&langpair="+(from||"km")+"|"+to,{signal:ac.signal});
+   if(!r.ok)throw new Error("HTTP "+r.status);
+   const j=await r.json();
+   if(+j.responseStatus!==200)throw new Error(j.responseDetails||("status "+j.responseStatus));
+   out.push(j.responseData.translatedText);
+  }finally{clearTimeout(tm)}
+ }
+ return out.join(" ").trim();
+}
+async function trGo(){
+ const txt=(($("#trs")||{}).value||"").trim(),to=($("#trl")||{}).value||"all";
+ if(!txt){toast("សូមវាយអត្ថបទជាមុន");return}
+ if(to==="all"&&txt.length>300){toast("ជម្រើស ទាំង ១៦ ភាសា អនុញ្ញាតត្រឹម ៣០០ តួអក្សរ");return}
+ if(!navigator.onLine){toast("ត្រូវការអ៊ីនធឺណិត");return}
+ V.trl=to;V.trres=[];V.trbusy=1;$("#trr").innerHTML=trHtml();
+ const sf=V.trsrc==="en"?"en":"km",T=trTargets(),q=(to==="all"?T:T.filter(x=>x[0]===to)).slice();
+ const worker=async()=>{
+  while(q.length){
+   const t=q.shift();let txt2=null,err="";
+   try{txt2=await trOne(txt,t[0],sf)}catch(e){err=e.name==="AbortError"?"អស់ពេល":String(e.message||e)}
+   V.trres.push({code:t[0],flag:t[1],name:t[2],tts:t[3],txt:txt2,err});
+   const b=$("#trr");if(b)b.innerHTML=trHtml();
+  }
+ };
+ await Promise.all([worker(),worker(),worker()]);
+ V.trbusy=0;
+ if(V.trres.length&&V.trres.every(x=>x.txt===null))toast("បកប្រែមិនបាន។ ពិនិត្យអ៊ីនធឺណិត ឬអាចអស់កូតាប្រចាំថ្ងៃ");
+}
+document.addEventListener("change",e=>{if(e.target.id==="trl")V.trl=e.target.value});
+
+/* ===== បង់កាក់ដើម្បីមើល ===== */
+const FREE_DAYS=7,DAY=864e5; /* រយៈពេលឥតគិតថ្លៃ (ថ្ងៃ) */
+const price=v=>Math.max(0,parseInt(v.pr)||0);
+const freeLeft=v=>v.fr?Math.max(0,(v.ts||v.id)+FREE_DAYS*DAY-Date.now()):0;
+const isOwner=v=>!!S.user&&(v.o===S.user.id||v.uid===S.user.id);
+function locked(v,key){
+ if(!price(v)||isOwner(v)||freeLeft(v)>0)return false;
+ return !(S.user&&(U().paid||[]).includes(key||("v"+v.id)));
+}
+function priceTxt(v){
+ const p=price(v);if(!p)return "";
+ if(isOwner(v))return "🪙 "+p+" (តម្លៃរបស់អ្នក)"+(v.fr?" · ឥតគិតថ្លៃ ៧ ថ្ងៃដំបូង":"");
+ const fl=freeLeft(v);
+ if(fl>0)return "🎁 ឥតគិតថ្លៃ នៅសល់ "+Math.ceil(fl/DAY)+" ថ្ងៃ · បន្ទាប់មក 🪙 "+p;
+ return "🔓 បានបង់ 🪙 "+p;
+}
+function tagH(v,key,inl){
+ const p=price(v);if(!p)return "";
+ const fl=freeLeft(v),t=(fl>0&&!isOwner(v))?"🎁 "+Math.ceil(fl/DAY)+" ថ្ងៃ":locked(v,key)?"🔒 🪙"+p:"🔓 🪙"+p;
+ return `<span class="ptag${inl?" inl":""}">${t}</span>`;
+}
+const vid=(v,c="")=>{
+ if(locked(v))return `<div class="th ${c}"><div class="ph0">🔒<small>🪙 ${price(v)}</small></div>${v.d?`<span class="dur">${esc(v.d)}</span>`:""}${tagH(v)}</div>`;
+ return vid0(v,c).replace(/<\/div>$/,tagH(v)+"</div>");
+};
+function lockBox(v,k,cls){
+ const p=price(v);
+ return `<div class="lockbox ${cls||""}"><div style="font-size:34px">🔒</div><b>🪙 ${p} កាក់</b><div class="s" style="margin:4px 0 8px">${v.fr?"រយៈពេលឥតគិតថ្លៃ ៧ ថ្ងៃបានផុតហើយ។ ":""}ត្រូវបង់កាក់ដើម្បីមើល</div><button class="pill on" data-a="unlock" data-k="${k}" data-i="${v.id}">${S.user?"🔓 បង់កាក់ដើម្បីមើល":"ចូលគណនីដើម្បីបង់"}</button></div>`;
+}
+function unlock(key,v){
+ if(!need())return false;
+ const u=U(),p=price(v);
+ if(u.coins<p){toast("🪙 កាក់មិនគ្រប់ (ត្រូវការ "+p+")។ ទទួលកាក់ពីបេសកកម្ម");go("wallet");return false}
+ u.coins-=p;(u.paid=u.paid||[]).push(key);
+ const ow=v.o||v.uid;
+ if(ow&&S.u[ow]&&ow!==S.user.id){S.u[ow].coins=(S.u[ow].coins||0)+p;S.u[ow].earn=(S.u[ow].earn||0)+p}
+ save();toast("🔓 បានបើក (-"+p+" កាក់)");return true;
+}
+const resetUp=()=>{$("#ucat").value="";$("#upr").value="10";$("#ufr").checked=true;$("#uow").checked=false};
+const resetDy=()=>{$("#dypr").value="10";$("#dyfr").checked=true;$("#dyow").checked=false};
+
+/* ===== ទាញយក ===== */
+async function dl(url,name){
+ if(!url){toast("គ្មានឯកសារ");return}
+ try{
+  const b=await(await fetch(url)).blob();
+  const E={"video/mp4":"mp4","video/webm":"webm","video/quicktime":"mov","image/jpeg":"jpg","image/png":"png","image/webp":"webp","image/gif":"gif","audio/mpeg":"mp3","audio/mp4":"m4a","audio/aac":"aac","audio/ogg":"ogg","audio/wav":"wav","audio/x-wav":"wav","audio/webm":"weba","audio/flac":"flac"};
+  const ext=E[b.type]||(b.type.split("/")[1]||"bin"),a=document.createElement("a");
+  a.href=URL.createObjectURL(b);a.download=String(name||"vidkh").replace(/[\\\/:*?"<>|]+/g,"_")+"."+ext;
+  document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(a.href),5000);
+  toast("⬇ កំពុងទាញយក...");
+ }catch(e){toast("ទាញយកមិនបាន")}
+}
+
+/* ===== Feed ===== */
+const fcl=p=>(p.cm||[]).slice().reverse().map(c=>`<div class="s" style="margin-top:6px"><b>${esc(c.n)}</b> ${esc(c.t)} · ${ago(c.ts)}</div>`).join("");
+function fcard(p){
+ const me_=S.user&&S.user.id,liked=(p.likes||[]).includes(me_),mine=me_&&p.uid===me_,md=p.media||[],ph=md.filter(m=>m.k==="photo"),vd=md.filter(m=>m.k==="video");
+ const vw=((S.vw||{})["f"+p.id]||{n:0}).n,lk=md.length&&locked(p,"f"+p.id);
+ return `<div class="box fc" data-fid="${p.id}"><div class="cm" style="margin:0 0 8px">${av(p.by)}<div style="flex:1"><b>${esc(p.by)}</b><div class="s">${ago(p.ts)} · 📅 ${dstr(p.ts)}</div></div>${mine?`<button class="pill" data-a="fdel" data-i="${p.id}">លុប</button>`:""}</div>
+ ${p.t?`<p style="white-space:pre-wrap;overflow-wrap:anywhere">${esc(p.t)}</p>`:""}
+ ${lk?lockBox(p,"f"):""}${(!lk&&ph.length)?`<div class="pimg n${Math.min(ph.length,4)}">${ph.map(m=>`<button data-ph2="${m.id}" aria-label="រូបថត"><img src="${esc(URLS[m.id]||"")}" alt=""></button>`).join("")}</div>`:""}
+ ${lk?"":vd.map(m=>`<video class="fvid" src="${esc(URLS[m.id]||"")}" controls playsinline preload="metadata"></video>`).join("")}
+ <div class="s" style="margin-top:8px"><span class="fvw">👁 ${fmt(vw)}</span> · 📅 ${dstr(p.ts)}${(md.length&&price(p))?" · "+tagH(p,"f"+p.id,1):""}</div>
+ <div class="act" style="margin-top:6px"><button class="pill ${liked?"on":""}" data-a="flike" data-i="${p.id}">♥ ${(p.likes||[]).length}</button><button class="pill" data-a="fcmt" data-i="${p.id}">💬 ${(p.cm||[]).length}</button><button class="pill" data-a="fshare" data-i="${p.id}">↗ ${(S.sh||{})["f"+p.id]||0}</button>${md.length?`<button class="pill" data-a="fdl" data-i="${p.id}">⬇</button>`:""}</div>
+ <div class="fcm" hidden><div class="cmi"><input class="fci" placeholder="សរសេរមតិ..." aria-label="មតិ"><button class="pill on" data-a="fcm" data-i="${p.id}">ផ្ញើ</button></div><div class="fcl">${fcl(p)}</div></div></div>`;
+}
+function feedView(){
+ const l=S.feed||[];
+ return `<div class="wal"><div class="box"><textarea id="ft" class="ta" rows="3" maxlength="1000" placeholder="អ្នកកំពុងគិតអ្វី?">${esc(V.fdraft||"")}</textarea>
+ <div class="pv" id="fpv"></div>
+ <div class="row" style="margin-top:8px;gap:8px;justify-content:flex-start"><span class="s">🪙 តម្លៃមើលរូបថត/វីដេអូ</span><input id="fpr" class="sel" style="width:80px" inputmode="numeric" value="10" aria-label="តម្លៃ"><label class="s" style="display:flex;gap:4px"><input type="checkbox" id="ffr" checked> ឥតគិតថ្លៃ ៧ ថ្ងៃដំបូង</label></div>
+ <label class="chk"><input type="checkbox" id="fow"> ខ្ញុំមានសិទ្ធិលក់មាតិកានេះ (ត្រូវបញ្ជាក់បើដាក់តម្លៃ)</label>
+ <div class="row" style="margin-top:8px"><div class="act"><label class="pill" for="ff" style="cursor:pointer">📷 រូបថត / 🎞 វីដេអូ</label></div><button class="pill on" data-a="fpost">ផុស</button></div>
+ <input type="file" id="ff" accept="image/*,video/*" multiple hidden></div>`
+ +(l.length?l.map(fcard).join(""):`<div class="empty">មិនទាន់មានការផុសទេ។ សរសេរការផុសដំបូងរបស់អ្នក!</div>`)+`</div>`;
+}
+function feedMine(){
+ const l=(S.feed||[]).filter(p=>S.user&&p.uid===S.user.id);
+ return `<div class="act" style="margin-bottom:12px"><button class="pill on" data-a="tofeed">✍ សរសេរក្នុង Feed</button></div>`+(l.length?l.map(fcard).join(""):`<div class="empty">អ្វីដែលអ្នកផុសក្នុង Feed នឹងបង្ហាញនៅទីនេះ។</div>`);
+}
+let FIO=null;
+function feedInit(){
+ if(FIO){FIO.disconnect();FIO=null}
+ const cs=document.querySelectorAll(".fc");if(!cs.length)return;
+ FIO=new IntersectionObserver(es=>es.forEach(e=>{
+  if(!e.isIntersecting)return;
+  const c=e.target,id=c.dataset.fid;bump("f"+id);
+  const el=c.querySelector(".fvw");if(el)el.textContent="👁 "+fmt(((S.vw||{})["f"+id]||{n:0}).n);
+  FIO.unobserve(c);
+ }),{threshold:.5});
+ cs.forEach(c=>FIO.observe(c));
+}
+async function doFeed(){
+ if(!need())return;
+ const t=(($("#ft")||{}).value||"").trim(),fs=V.ffiles||[],md=[];
+ if(!t&&!fs.length){toast("សរសេរសារ ឬជ្រើសរូបថត/វីដេអូជាមុន");return}
+ const pr=fs.length?Math.max(0,Math.min(100000,parseInt($("#fpr").value)||0)):0,fr=pr&&$("#ffr").checked?1:0;
+ if(pr&&!$("#fow").checked){toast("សូមបញ្ជាក់ថាអ្នកមានសិទ្ធិលក់មាតិកានេះ");return}
+ const undo=()=>md.forEach(m=>{drop(m.id);if(URLS[m.id]){URL.revokeObjectURL(URLS[m.id]);delete URLS[m.id]}});
+ try{
+  for(const f of fs){
+   const vd=f.type.startsWith("video/"),b=vd?f:await shrink(f);
+   if(used()+md.reduce((a,m)=>a+m.sz,0)+b.size>lim()){undo();toast("Data ពេញ។ សូមទិញដាតាបន្ថែមក្នុងទំព័ររង្វាន់");return}
+   const id=Date.now()+md.length+1;await put(id,b);URLS[id]=URL.createObjectURL(b);md.push({id,k:vd?"video":"photo",sz:b.size});
+  }
+ }catch(e){undo();toast("រក្សាទុកមិនបាន");return}
+ const p={id:Date.now(),uid:S.user.id,by:S.user.name,t,media:md,pr,fr,ts:Date.now(),likes:[],cm:[]};
+ S.feed=[p].concat(S.feed||[]);
+ note({id:p.id,k:"feed",t:t.slice(0,60)||"រូបថត/វីដេអូ"});
+ V.fdraft="";V.ffiles=[];save();render();toast("✅ បានផុស");
+}
+let FVU=[];
+document.addEventListener("change",e=>{
+ if(e.target.id!=="ff")return;
+ FVU.forEach(u=>URL.revokeObjectURL(u));FVU=[];
+ const ok=[];
+ for(const f of [...e.target.files].slice(0,4)){const b=chk(f,f.type.startsWith("video/")?"video":"photo");if(b){toast(b);continue}ok.push(f)}
+ V.ffiles=ok;
+ const box=$("#fpv");if(!box)return;
+ box.innerHTML=ok.map(f=>{const u=URL.createObjectURL(f);FVU.push(u);return f.type.startsWith("video/")?`<video src="${u}" muted playsinline style="width:90px;height:90px;object-fit:cover;border-radius:8px"></video>`:`<img src="${u}" alt="">`}).join("");
+});
+
+/* ===== ផ្សារ (លក់ឥវ៉ាន់) ===== */
+const MC=["ម្ហូបអាហារ","សម្លៀកបំពាក់","អេឡិចត្រូនិក","ទូរស័ព្ទ","យានយន្ត","ផ្ទះ/ដី","សៀវភៅ/សិក្សា","ផ្សេងៗ"];
+$("#mkt").innerHTML=MC.map(c=>`<option value="${esc(c)}">${esc(c)}</option>`).join("");
+const money=x=>x.cur==="USD"?"$"+Number(x.price).toLocaleString("en-US",{maximumFractionDigits:2}):Number(x.price).toLocaleString("en-US")+"៛";
+function mcard(x){
+ const mine=S.user&&x.uid===S.user.id,tel=String(x.phone).replace(/[^\d+]/g,"");
+ return `<div class="mc"><div class="th" style="aspect-ratio:4/3">${x.ph&&URLS[x.ph]?`<img src="${esc(URLS[x.ph])}" alt="">`:`<div class="ph0">🛒</div>`}</div>
+ <div class="t">${esc(x.name)}</div><div style="font-weight:700;color:var(--ac)">${money(x)}</div>
+ <div class="s">${esc(x.cat)} · ${ago(x.ts)}</div><div class="s">📍 ${esc(x.loc)}</div>
+ <div class="act" style="margin-top:6px"><a class="pill" href="tel:${esc(tel)}">📞 ${esc(x.phone)}</a><a class="pill" target="_blank" rel="noopener" href="https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(x.loc)}">🗺</a>${mine?`<button class="pill" data-a="mdel" data-i="${x.id}">លុប</button>`:""}</div></div>`;
+}
+function marketView(){
+ const f=V.mc||"all",l=(S.shop||[]).filter(x=>f==="all"||x.cat===f);
+ return `<div class="wal"><div class="act" style="margin-bottom:10px"><button class="pill on" data-a="sell">＋ លក់ឥវ៉ាន់</button></div>
+ <div class="chips">${[["all","ទាំងអស់"]].concat(MC.map(c=>[c,c])).map(([k,n])=>`<button data-mc="${esc(k)}" class="${f===k?"on":""}">${esc(n)}</button>`).join("")}</div>
+ <p class="s" style="margin-bottom:10px">⚠️ ប្រុងប្រយ័ត្នការបោកប្រាស់៖ ជួបផ្ទាល់ មើលទំនិញជាមុន កុំផ្ញើប្រាក់មុន។</p>`
+ +grid(l,"មិនទាន់មានទំនិញទេ។ ចុច ＋ លក់ឥវ៉ាន់។","",mcard)+`</div>`;
+}
+$("#mkok").onclick=async()=>{
+ const m=$("#mkm"),n=$("#mkn").value.trim(),phr=$("#mkp").value.trim(),ph=phr.replace(/[^\d+]/g,""),loc=$("#mkl").value.trim(),pv=$("#mkv").value.trim().replace(/,/g,""),pr=parseFloat(pv);
+ if(!n||!phr||!loc||!pv){m.textContent="សូមបំពេញគ្រប់ប្រអប់ (ឈ្មោះ ទូរស័ព្ទ ទីតាំង តម្លៃ)";return}
+ if(!/^\+?\d{8,15}$/.test(ph)){m.textContent="លេខទូរស័ព្ទមិនត្រឹមត្រូវ";return}
+ if(!(pr>=0)){m.textContent="តម្លៃមិនត្រឹមត្រូវ";return}
+ let key=null,sz=0;const f=$("#mkf").files[0];
+ if(f){
+  const e=chk(f,"photo");if(e){m.textContent=e;return}
+  const b=await shrink(f);
+  if(used()+b.size>lim()){m.textContent="Data ពេញ។ សូមទិញដាតាបន្ថែម";return}
+  key=Date.now()+1;
+  try{await put(key,b)}catch(x){m.textContent="រក្សាទុករូបថតមិនបាន";return}
+  URLS[key]=URL.createObjectURL(b);sz=b.size;
+ }
+ const x={id:Date.now(),uid:S.user.id,by:S.user.name,name:n,phone:phr,loc,price:pr,cur:$("#mkc").value,cat:$("#mkt").value,ph:key,sz,ts:Date.now()};
+ S.shop=[x].concat(S.shop||[]);note({id:x.id,k:"item",t:n});save();
+ $("#dmk").close();V.mc="all";V.cat="market";go("home");toast("✅ បានដាក់លក់");
+};
+
+/* ===== ទូរទស្សន៍ (IPTV-Org) ===== */
+const TVC=[["kh","🇰🇭","កម្ពុជា"],["la","🇱🇦","ឡាវ"],["mm","🇲🇲","មីយ៉ាន់ម៉ា"],["vn","🇻🇳","វៀតណាម"],["ph","🇵🇭","ហ្វីលីពីន"],["id","🇮🇩","ឥណ្ឌូណេស៊ី"],["sg","🇸🇬","សិង្ហបុរី"],["in","🇮🇳","ឥណ្ឌា"],["cn","🇨🇳","ចិន"],["tw","🇹🇼","តៃវ៉ាន់"],["jp","🇯🇵","ជប៉ុន"],["us","🇺🇸","សហរដ្ឋអាមេរិក"],["ru","🇷🇺","រុស្ស៊ី"]];
+const TVG=[["កម្ពុជា និងអាស៊ីអាគ្នេយ៍",["kh","la","mm","vn","ph","id","sg"]],["អាស៊ីបូព៌ា និងអាស៊ីខាងត្បូង",["in","cn","tw","jp"]],["អាមេរិក និងអឺរ៉ុប",["us","ru"]]];
+function parseM3U(t){
+ const out=[],seen=new Set();let cur=null,skipped=0;
+ for(const l0 of String(t).split(/\r?\n/)){
+  const l=l0.trim();if(!l)continue;
+  if(l.startsWith("#EXTINF")){
+   const m=l.match(/,(.*)$/);
+   cur={name:(m?m[1]:"").trim(),logo:(l.match(/tvg-logo="([^"]*)"/)||[])[1]||"",grp:(l.match(/group-title="([^"]*)"/)||[])[1]||""};
+  }else if(/^#(EXTVLCOPT|KODIPROP)/i.test(l)){
+   if(cur&&/referr?er|user-agent/i.test(l))cur.hdr=1;
+  }else if(l[0]!=="#"&&cur){
+   cur.url=l;
+   if(cur.name&&!cur.hdr&&/^https:\/\//i.test(l)&&!seen.has(l)){seen.add(l);if(!/^https:\/\//i.test(cur.logo))cur.logo="";out.push(cur)}else skipped++;
+   cur=null;
+  }
+ }
+ return {list:out,skipped};
+}
+function tvView(){
+ const cc=V.tvcc||"kh";
+ return `<div class="wal"><p class="s" style="margin-bottom:8px">📺 បញ្ជីឆានែលសាធារណៈពី IPTV-Org។ ត្រូវការអ៊ីនធឺណិត ហើយឆានែលខ្លះអាចមិនដំណើរការ ឬមានកំណត់តំបន់។</p>
+ <div id="tvpw"></div>
+ ${TVG.map(([n,ks])=>`<div class="s" style="margin:8px 0 4px">${n}</div><div class="chips">${ks.map(k=>{const c=TVC.find(x=>x[0]===k);return `<button data-a="tvcc" data-k="${k}" class="${cc===k?"on":""}">${c[1]} ${c[2]}</button>`}).join("")}</div>`).join("")}
+ <input id="tvq" class="sel" placeholder="ស្វែងរកឆានែល..." value="${esc(V.tvq||"")}" aria-label="ស្វែងរកឆានែល" style="margin:8px 0">
+ <div id="tvl"></div></div>`;
+}
+function tvList(){
+ const box=$("#tvl");if(!box)return;
+ const cc=V.tvcc||"kh",d=(V.tvdata||{})[cc];
+ if(d===undefined||d===null){box.innerHTML=`<div class="empty">កំពុងទាញយកបញ្ជីឆានែល...</div>`;return}
+ if(d==="err"){box.innerHTML=`<div class="empty">⚠️ ទាញយកបញ្ជីមិនបាន។ ពិនិត្យអ៊ីនធឺណិត។<br><button class="pill on" data-a="tvcc" data-k="${cc}" style="margin-top:8px">ព្យាយាមម្តងទៀត</button></div>`;return}
+ const q=(V.tvq||"").trim().toLowerCase(),f=d.list.filter(c=>!q||(c.name+" "+c.grp).toLowerCase().includes(q));
+ V.tvf=f.slice(0,V.tvn||60);
+ box.innerHTML=`<div class="s" style="margin-bottom:6px">${f.length} ឆានែល${d.skipped?` · លាក់ ${d.skipped} ដែលមិនគាំទ្រ (មិនមែន https ឬត្រូវការ header)`:""}</div>`
+  +(V.tvf.length?V.tvf.map((c,i)=>`<button class="tvi" data-a="tvch" data-i="${i}">${c.logo?`<img src="${esc(c.logo)}" alt="" loading="lazy" referrerpolicy="no-referrer" onerror="this.style.visibility='hidden'">`:`<span class="lg0">📺</span>`}<div style="flex:1;min-width:0"><div class="t">${esc(c.name)}</div>${c.grp?`<div class="s">${esc(c.grp)}</div>`:""}</div><span>▶</span></button>`).join(""):`<div class="empty">រកមិនឃើញឆានែលទេ។</div>`)
+  +(f.length>V.tvf.length?`<button class="pill" data-a="tvmore" style="margin:6px 0">បង្ហាញបន្ថែម (${f.length-V.tvf.length})</button>`:"");
+}
+async function tvLoad(cc){
+ V.tvdata=V.tvdata||{};V.tvdata[cc]=null;tvList();
+ const ac=new AbortController(),tm=setTimeout(()=>ac.abort(),20000);
+ try{
+  const r=await fetch("https://iptv-org.github.io/iptv/countries/"+cc+".m3u",{signal:ac.signal});
+  if(!r.ok)throw new Error("HTTP "+r.status);
+  V.tvdata[cc]=parseM3U(await r.text());
+ }catch(e){V.tvdata[cc]="err"}
+ finally{clearTimeout(tm)}
+ if((V.tvcc||"kh")===cc)tvList();
+}
+function tvInit(){
+ const cc=V.tvcc||"kh";V.tvdata=V.tvdata||{};
+ if(V.tvdata[cc]===undefined)tvLoad(cc);else tvList();
+ if(V.tvcur)tvPlay(V.tvcur);
+}
+let TVH=null;
+function tvStop(){if(TVH){try{TVH.destroy()}catch(e){}TVH=null}}
+function loadHls(){
+ return new Promise((ok,no)=>{
+  if(window.Hls)return ok();
+  const s=document.createElement("script");s.src="https://cdn.jsdelivr.net/npm/hls.js@1/dist/hls.min.js";
+  s.onload=ok;s.onerror=()=>no(new Error("hls"));document.head.appendChild(s);
+ });
+}
+async function tvPlay(ch){
+ V.tvcur=ch;const box=$("#tvpw");if(!box)return;tvStop();
+ box.innerHTML=`<div class="tvp"><video id="tvp" controls autoplay playsinline></video><div class="row" style="margin-top:6px"><b>${esc(ch.name)}</b><div class="act"><button class="pill" data-a="tvcp">⧉ តំណ</button><button class="pill" data-a="tvx">✕</button></div></div><div class="s" id="tvm"></div></div>`;
+ box.scrollIntoView({block:"nearest"});
+ const v=$("#tvp"),m=$("#tvm"),bad=()=>{m.textContent="⚠️ ឆានែលនេះមិនអាចចាក់បាន (អាចត្រូវបានរារាំង កំណត់តំបន់ ឬមិនដំណើរការ)។ សូមសាកល្បងឆានែលផ្សេង។"};
+ v.onerror=bad;
+ const u=ch.url;
+ if(!/\.m3u8(\?|#|$)/i.test(u)||v.canPlayType("application/vnd.apple.mpegurl")){v.src=u;v.play().catch(()=>{});return}
+ try{await loadHls()}catch(e){m.textContent="មិនអាចផ្ទុកកម្មវិធីចាក់ (ត្រូវការអ៊ីនធឺណិត)។";return}
+ if(V.tvcur!==ch||!$("#tvp"))return;
+ if(window.Hls&&Hls.isSupported()){
+  TVH=new Hls();
+  TVH.on(Hls.Events.ERROR,(ev,dt)=>{if(dt&&dt.fatal){bad();tvStop()}});
+  TVH.loadSource(u);TVH.attachMedia(v);v.play().catch(()=>{});
+ }else{v.src=u;v.play().catch(()=>{})}
+}
+
+const seenTs=()=>S.user?(U().seen||0):(S.gseen||0);
+const mineNote=n=>S.user&&n.uid===S.user.id;
+const unread=()=>{const t=seenTs();return(S.notes||[]).filter(n=>n.ts>t&&!mineNote(n))};
+let BN=0;
+function bell(){
+ const n=unread().length,b=$("#bdg");
+ b.hidden=!n;b.textContent=n>9?"9+":String(n);
+ if(n>BN){b.classList.remove("pop");void b.offsetWidth;b.classList.add("pop")}
+ BN=n;
+}
+function note(v){
+ S.notes=[{id:Date.now(),vid:v.id,k:v.k,t:v.t,by:S.user?S.user.name:"?",uid:S.user?S.user.id:"",ts:Date.now(),link:!!v.link,lang:v.lang}].concat(S.notes||[]).slice(0,60);
+ bell();
+}
+const tsOf=v=>v.ts||v.id;
+const dstr=ts=>{try{return new Date(ts).toLocaleString("km-KH",{day:"numeric",month:"short",year:"numeric",hour:"2-digit",minute:"2-digit"})}catch(e){return new Date(ts).toLocaleString()}};
+const vcount=v=>(v.v||0)+(((S.vw||{})["v"+v.id])||{n:0}).n;
+function bump(k){
+ const w=S.vw||(S.vw={}),x=w[k]||(w[k]={n:0,by:[]}),u=S.user?S.user.id:"guest";
+ if(!x.by.includes(u)){x.by.push(u);x.n++;save()}
+}
+if(!S.sh)S.sh={};
+if(!S.vw)S.vw={};
+
+/* ===== ជំនួយការណែនាំ ===== */
+const GUIDE_NAME="AI Sonnet 3.2"; /* ប្តូរឈ្មោះជំនួយការនៅទីនេះ */
+const KB=[
+ {k:["កន្លែង","តុក្កតា","place","cartoon","ទេសចរណ៍"],a:"ទំព័រដើម → 📍 កន្លែង ឬ 🧸 តុក្កតា។ ចុចប៊ូតុង 📍/🧸 ក្នុងរបារបង្ហោះ ដើម្បីបង្ហោះវីដេអូ ឬ ＋ តំណ (YouTube, Facebook, TikTok, Google Maps ។ល។) ហើយជ្រើសប្រភេទ។",go:"home"},
+ {k:["តន្ត្រី","ចម្លេង","ហ្គេម","music","game","song"],a:"ទំព័រដើម → 🎵 តន្ត្រី ឬ 🎮 ហ្គេម។ ចុចប៊ូតុង 🎵/🎮 ក្នុងរបារបង្ហោះ ដើម្បីបង្ហោះឯកសារ (ចម្លេង mp3 ឬវីដេអូ) ឬ ＋ តំណ (YouTube, Spotify, SoundCloud, តំណ .mp3 ឬគេហទំព័រហ្គេម)។",go:"home"},
+ {k:["ទូរទស្សន៍","ទូរទស្សន","tv","iptv"],a:"ទំព័រដើម → 📺 ទូរទស្សន៍៖ ជ្រើសប្រទេស (១៣) ហើយជ្រើសឆានែលដើម្បីមើលផ្ទាល់។ ត្រូវការអ៊ីនធឺណិត ហើយឆានែលខ្លះអាចមិនដំណើរការ ឬមានកំណត់តំបន់។",go:"home"},
+ {k:["បង់កាក់","តម្លៃ","price","locked","ចាក់សោ","ឥតគិតថ្លៃ"],a:"ពេលបង្ហោះវីដេអូ/រូបថត (ទំព័រដើម ឬគណនី) អ្នកអាចដាក់តម្លៃជាកាក់។ អ្នកមើលត្រូវបង់កាក់ជាមុនទើបមើលបាន ហើយកាក់ចូលគណនីអ្នកបង្ហោះ។ ជម្រើស 'ឥតគិតថ្លៃ ៧ ថ្ងៃដំបូង' ឲ្យមើលដោយឥតគិតថ្លៃ ៧ ថ្ងៃ រួចទើបបង់។ តម្លៃ 0 = ឥតគិតថ្លៃ។",go:"wallet"},
+ {k:["feed","ហ្វីដ"],a:"ទំព័រដើម → 📰 Feed៖ សរសេរសារ ភ្ជាប់រូបថត/វីដេអូ ហើយចុច ផុស។ មាន ♥ 💬 ↗ ចំនួនមើល និង ⬇ ទាញយក។ ការផុសរបស់អ្នកក៏បង្ហាញក្នុង ខ្ញុំ → 📰 Feed ខ្ញុំ។",go:"home"},
+ {k:["បកប្រែ","translate"],a:"ទំព័រដើម → 📚 សិក្សា → 🌐 បកប្រែ៖ ជ្រើសភាសាដើម (ខ្មែរ ឬ English) វាយអត្ថបទ ជ្រើសភាសាគោលដៅ (១៦ ភាសា) ឬ ទាំង ១៦ រួចចុច បកប្រែ។ ត្រូវការអ៊ីនធឺណិត។",go:"study"},
+ {k:["ផ្សារ","លក់","ឥវ៉ាន់","shop","market"],a:"ទំព័រដើម → 🛒 ផ្សារ → ＋ លក់ឥវ៉ាន់៖ បំពេញឈ្មោះ លេខទូរស័ព្ទ ទីតាំង តម្លៃ និងប្រភេទ (រូបថតមិនចាំបាច់)។",go:"home"},
+ {k:["ទាញយក","download"],a:"ចុច ⬇ លើការបង្ហោះក្នុង Feed ឬលើវីដេអូដែលអ្នកបានបង្ហោះ ដើម្បីទាញយក។ វីដេអូ YouTube/Facebook មិនអាចទាញយកបានទេ។"},
+ {k:["បង្ហោះ","upload","post","ផុស"],a:"ចុច ＋ នៅរបារខាងលើ → ជ្រើសប្រភេទ (វីដេអូ/Reels/ភាពយន្ត/រូបថត) → ជ្រើសឯកសារពីទូរស័ព្ទ → បង្ហោះ។\nត្រូវចូលគណនីមុន ហើយឯកសារត្រូវតែជាវីដេអូ ឬរូបថត។ Data ឥតគិតថ្លៃ 70GB។",go:"home"},
+ {k:["reels","រីល","វីដេអូខ្លី"],a:"Reels ជាវីដេអូខ្លី៖ អូសឡើងលើ/ចុះក្រោមដើម្បីប្តូរ ចុចលើវីដេអូដើម្បីផ្អាក/ចាក់ ហើយប្រើប៊ូតុង ♥ 💬 ↗ 🔊 នៅខាងស្តាំ។ ចង់បង្ហោះ Reels ចុច ＋ ហើយជ្រើស Reels។",go:"reels"},
+ {k:["ភាពយន្ត","movie"],a:"ទំព័រ 🎬 ភាពយន្ត បង្ហាញភាពយន្តជាប្លង់ក្រដាសផ្ទាំងរូបភាព។ ចង់បង្ហោះភាពយន្ត ចុច ＋ ហើយជ្រើស ភាពយន្ត។",go:"movies"},
+ {k:["រូបថត","photo","រូបភាព"],a:"ទំព័រ ▣ រូបថត រក្សាទុករូបថតដែលបង្ហោះពីទូរស័ព្ទ។ ចុច ＋ ជ្រើស រូបថត។ ចុចរូបដើម្បីមើលធំ ឬកាត់ត (✂)។",go:"photos"},
+ {k:["សិក្សា","study","មេរៀន","ចិន","អង់គ្លេស","english","chinese","ខ្មែរ"],a:"ទំព័រដើម → ផ្ទាំង 📚 សិក្សា មាន ៣ ភាសា៖ ចិន ខ្មែរ អង់គ្លេស។ ផ្ទាំង 📖 មេរៀន មានពាក្យ/ប្រយោគ ហើយចុច 🔊 ដើម្បីស្តាប់។ ផ្ទាំង 💬 សារ/ប្រកាស សម្រាប់សរសេរសារ ភ្ជាប់រូបថតពីទូរស័ព្ទ ហើយអ្នកដទៃអាច ♥ សរសេរមតិ និងចែករំលែក។",go:"study"},
+ {k:["កាក់","coin","បេសកកម្ម","mission","រង្វាន់"],a:"មើលវីដេអូ Reels ឬវីដេអូតាមតំណ ឲ្យគ្រប់ ៣ នាទីក្នុងមួយថ្ងៃ (មានបេសកកម្មតំណបន្ថែមក្នុងទំព័រ 🪙) → ចុច 🪙 → ទទួលកាក់ (ថ្ងៃ ១ = 50 ... ថ្ងៃ ៧ = 200 រួចចាប់ផ្តើមថ្មី)។ ប្រើកាក់ទិញ Data ឬក្រេឌីត AI កាត់ត។",go:"wallet"},
+ {k:["data","ដាតា","ទំហំ","gb","ទិញ","ពេញ"],a:"Data ឥតគិតថ្លៃ 70GB សម្រាប់វីដេអូ រូបថត និងសារ។ បើពេញ ទិញបន្ថែមក្នុង 🪙 → ហាង (+10GB = 50 កាក់ ។ល។)។",go:"wallet"},
+ {k:["កាត់ត","edit","កាត់"],a:"បើកវីដេអូ ឬរូបថតរបស់អ្នក → ចុច ✂ កាត់ត (ត្រូវមានក្រេឌីតពីហាង)។ រូបថត៖ ពន្លឺ ពណ៌ កាត់ទំហំ បង្វិល។ វីដេអូ៖ កាត់ចាប់ផ្តើម/បញ្ចប់។",go:"wallet"},
+ {k:["cv","ប្លុក","blog","ក្រដាស","a4","ឯកសារ","ពាក្យសុំ"],a:"ខ្ញុំ → ✍ សរសេរប្លុក/CV → ជ្រើសក្រដាស (CV ប្លុក សំបុត្រ ។ល។) → កែសម្រួលដោយរបារឧបករណ៍ → រក្សាទុក ឬ 🖨 PDF។",go:"you"},
+ {k:["ជូនដំណឹង","កណ្តឹង","notification","bell","សញ្ញាក្រហម"],a:"កណ្តឹង 🔔 បង្ហាញសញ្ញាក្រហមពេលមានការបង្ហោះថ្មី។ ចុចដើម្បីមើលបញ្ជី ហើយចុចលើធាតុណាមួយដើម្បីបើក។"},
+ {k:["តំណ","link","youtube","facebook","tiktok"],a:"ក្នុងទំព័រដើម ចុច ＋ បន្ថែមតំណ → បិទភ្ជាប់តំណ https:// (YouTube, Facebook, TikTok, Vimeo, .mp4 ឬគេហទំព័រផ្សេង)។",go:"home"},
+ {k:["សុវត្ថិភាព","មេរោគ","virus","apk"],a:"ខ្ញុំ → 🛡 សុវត្ថិភាព ពិនិត្យចំណុចដែលកម្មវិធីអាចពិនិត្យបាន។ កម្មវិធីនេះមិនមែនជាកម្មវិធីកម្ចាត់មេរោគទេ សូមប្រើ Google Play Protect។ កុំទាញយក .apk ពីប្រភពមិនស្គាល់។",go:"security"},
+ {k:["គណនី","ចូល","ចុះឈ្មោះ","google","gmail","account","login","ទូរស័ព្ទ"],a:"ចុចប៊ូតុងគណនីខាងលើ → បង្កើតគណនីក្នុងឧបករណ៍ ឬចូលជាមួយ Google (ត្រូវដាក់ Client ID)។ វីដេអូដែលបង្ហោះមិនបាត់ទេ ទោះបង្កើតគណនីថ្មី។"},
+ {k:["ម៉ោង","12","24","clock"],a:"ចុចលើម៉ោងនៅខាងលើស្តាំ ដើម្បីប្តូររវាង 12 និង 24 ម៉ោង។"},
+ {k:["មើល","ខមិន","មតិ","ចែករំលែក","share","comment","view","កាលបរិច្ឆេត"],a:"ក្រោមវីដេអូ បង្ហាញចំនួនមើល កាលបរិច្ឆេតបង្ហោះ ចំនួនមតិ និងចំនួនចែករំលែក។ ចុច ♥ ដើម្បីចូលចិត្ត ចុច ចែករំលែក ហើយសរសេរមតិនៅខាងក្រោម។"},
+ {k:["លុប","delete","remove"],a:"បើកវីដេអូ ឬសាររបស់អ្នក → ចុច លុប។ អ្នកអាចលុបបានតែមាតិការបស់អ្នកផ្ទាល់។"}
+];
+const TOPICS=[["របៀបបង្ហោះ","បង្ហោះ"],["សិក្សា","សិក្សា"],["កាក់","កាក់"],["ឯកសារ/CV","cv"],["សុវត្ថិភាព","សុវត្ថិភាព"]];
+function gsay(t,me,go){
+ const d=document.createElement("div");d.className="bm"+(me?" me":"");d.textContent=t;
+ if(go){const b=document.createElement("button");b.className="pill on";b.dataset.a="gogo";b.dataset.k=go;b.textContent="ទៅទំព័រនោះ";d.appendChild(document.createElement("br"));d.appendChild(b)}
+ $("#dgm").appendChild(d);$("#dgm").scrollTop=1e9;
+}
+function gask(q){
+ gsay(q,1);
+ const l=q.toLowerCase();let best=null,sc=0;
+ KB.forEach(e=>{const n=e.k.filter(w=>l.includes(w.toLowerCase())).length;if(n>sc){sc=n;best=e}});
+ if(best)gsay(best.a,0,best.go);
+ else gsay("ខ្ញុំមិនទាន់យល់សំណួរនេះទេ។ សូមសាកល្បងសួរអំពី៖ បង្ហោះ, Reels, ភាពយន្ត, សិក្សា, កាក់, Data, កាត់ត, CV, ជូនដំណឹង, សុវត្ថិភាព ឬគណនី។");
+}
+function openGuide(first){
+ $("#dgt").textContent="🤖 "+GUIDE_NAME;
+ $("#dgc").innerHTML=TOPICS.map(([n,q])=>`<button data-a="gq" data-k="${q}">${n}</button>`).join("");
+ if(first||!$("#dgm").children.length){
+  $("#dgm").innerHTML="";
+  gsay((first&&S.user?"សួស្តី "+S.user.name+"! ":"សួស្តី! ")+"សូមស្វាគមន៍មកកាន់ VidKH។ ខ្ញុំជា "+GUIDE_NAME+" ជំនួយការណែនាំការប្រើប្រាស់។\n\n១) ចុច ＋ ដើម្បីបង្ហោះវីដេអូ/រូបថត\n២) នៅទំព័រដើម ចុច 📚 សិក្សា ដើម្បីរៀន ចិន ខ្មែរ អង់គ្លេស និងសរសេរសារ\n៣) មើលវីដេអូ ៣ នាទី/ថ្ងៃ ដើម្បីទទួលកាក់ 🪙\n៤) កណ្តឹង 🔔 ជូនដំណឹងពេលមានការបង្ហោះថ្មី\n\nចុចប៊ូតុងខាងក្រោម ឬសួរខ្ញុំបានគ្រប់ពេល។");
+ }
+ $("#dg").showModal();
+}
+$("#dgf").onsubmit=e=>{e.preventDefault();const q=$("#dgi").value.trim();if(!q)return;$("#dgi").value="";gask(q)};
+
+const NK=n=>n.k==="feed"?["📰","Feed"]:n.k==="item"?["🛒","ផ្សារ"]:n.k==="post"?["📚","សារសិក្សា"]:n.k==="audio"?["🎵","ចម្លេង"]:n.link?["🔗","តំណ"]:n.k==="photo"?["🖼","រូបថត"]:n.k==="reel"?["▶","Reels"]:n.k==="movie"?["🍿","ភាពយន្ត"]:["🎬","វីដេអូ"];
+const ago=ts=>{const m=Math.floor((Date.now()-ts)/6e4);return m<1?"ឥឡូវនេះ":m<60?m+" នាទីមុន":m<1440?Math.floor(m/60)+" ម៉ោងមុន":Math.floor(m/1440)+" ថ្ងៃមុន"};
+const ICON={fb:"f",tt:"♪",vm:"▶",link:"🔗",sp:"🎧",sc:"🎧",map:"📍"};
+function parseLink(u){
+ let h;try{h=new URL(String(u).trim())}catch(e){return null}
+ if(h.protocol!=="https:")return null;
+ const host=h.hostname.replace(/^(www|m|mobile|web)\./,""),full=h.href;
+ if(/(^|\.)(youtube\.com|youtu\.be|youtube-nocookie\.com)$/.test(host)){const y=ytid(full);if(y)return{kind:"yt",yt:y,ch:"YouTube",link:full}}
+ if(/(^|\.)facebook\.com$/.test(host)||host==="fb.watch"){
+  const v=/\/(videos?|watch|reel)\b/.test(h.pathname)||host==="fb.watch";
+  return{kind:"fb",emb:"https://www.facebook.com/plugins/"+(v?"video":"post")+".php?show_text=false&href="+encodeURIComponent(full),ch:"Facebook",link:full};
+ }
+ const tt=full.match(/tiktok\.com\/.*\/video\/(\d+)/);
+ if(tt)return{kind:"tt",emb:"https://www.tiktok.com/embed/v2/"+tt[1],ch:"TikTok",link:full};
+ const vm=host==="vimeo.com"&&full.match(/vimeo\.com\/(\d+)/);
+ if(vm)return{kind:"vm",emb:"https://player.vimeo.com/video/"+vm[1],ch:"Vimeo",link:full};
+ if(host==="maps.app.goo.gl"||(/^google\./.test(host)&&h.pathname.startsWith("/maps")))return{kind:"map",ch:"Google Maps",link:full};
+ const sp=host==="open.spotify.com"&&h.pathname.match(/^\/(?:intl-[a-z]+\/)?(track|album|playlist|episode|show|artist)\/([A-Za-z0-9]+)/);
+ if(sp)return{kind:"sp",emb:"https://open.spotify.com/embed/"+sp[1]+"/"+sp[2],ch:"Spotify",link:full};
+ if(host==="soundcloud.com"||host==="on.soundcloud.com")return{kind:"sc",emb:"https://w.soundcloud.com/player/?url="+encodeURIComponent(full),ch:"SoundCloud",link:full};
+ if(/\.(mp3|m4a|aac|ogg|oga|wav|flac)$/i.test(h.pathname))return{kind:"audio",ch:host,link:full};
+ if(/\.(mp4|webm|ogv|m4v)$/i.test(h.pathname))return{kind:"mp4",ch:host,link:full};
+ const N={"instagram.com":"Instagram","t.me":"Telegram","x.com":"X","twitter.com":"X","tiktok.com":"TikTok"};
+ return{kind:"link",ch:N[host]||host,link:full};
+}
+function player(v){
+ if(locked(v))return lockBox(v,"v","wl");
+ const fr=(u,k)=>`<iframe class="player" data-pk="${k||""}" onload="embHook(this)" src="${esc(u)}" title="${esc(v.ch)}" allow="autoplay; encrypted-media; picture-in-picture; fullscreen" allowfullscreen referrerpolicy="strict-origin-when-cross-origin" style="border:0"></iframe>`;
+ if(v.yt)return fr("https://www.youtube-nocookie.com/embed/"+v.yt+"?rel=0&enablejsapi=1","yt");
+ if(v.emb)return fr(v.kind==="vm"?v.emb+"?api=1":v.emb,v.kind==="vm"?"vm":"x");
+ if(v.kind==="link"||v.kind==="map")return `<div class="th" style="border-radius:12px"><div class="ph0">${ICON[v.kind]||ICON.link}<b style="font-size:16px">${esc(v.ch)}</b><a class="pill on" target="_blank" rel="noopener" href="${esc(v.link)}" style="margin-top:8px;font-size:14px">បើកតំណ</a></div></div>`;
+ if(v.k==="audio"||v.kind==="audio")return `<div class="apl"><div class="ph0" style="padding:26px 12px;font-size:52px">🎵<b style="font-size:16px">${esc(v.t)}</b><small>${esc(v.ch)}</small></div><audio class="aud" id="pl" src="${esc(src(v))}" controls autoplay></audio></div>`;
+ return `<video class="player" id="pl" src="${esc(src(v))}" controls autoplay playsinline></video>`;
+}
+
+/* ===== ក្រដាស / ប្លុក / CV ===== */
+const SZ={A4:[794,1123],A5:[559,794],Letter:[816,1056]};
+let DOC=null,PW=794,SELR=null,dirty=0;
+const me=()=>({n:S.user?esc(S.user.name):"ឈ្មោះរបស់អ្នក",e:S.user&&S.user.email?esc(S.user.email):"email@gmail.com",p:S.user&&S.user.phone?esc(S.user.phone):"+855 12 345 678"});
+const H2=(c,t)=>`<h2 style="color:${c};border-bottom:2px solid ${c}">${t}</h2>`;
+const TPL={
+ blank:{n:"ក្រដាសទំនេរ",i:"📄",h:()=>"<p><br></p>"},
+ blog:{n:"សរសេរប្លុក",i:"✍️",h:()=>{const m=me();return `<h1>ចំណងជើងប្លុក</h1><p style="color:#666">${new Date().toLocaleDateString()} · ដោយ ${m.n}</p><p>សរសេរសេចក្តីផ្តើមនៅទីនេះ...</p><h2>ចំណងជើងរង</h2><p>ខ្លឹមសារ...</p><h2>សេចក្តីសន្និដ្ឋាន</h2><p>...</p>`}},
+ cv1:{n:"CV បុគ្គលិក (ខៀវ)",i:"💼",h:()=>{const m=me(),c="#1f4fd8";return `<h1 style="text-align:center;margin:0;color:${c}">${m.n}</h1><p style="text-align:center;color:#555">តួនាទីដែលចង់ធ្វើ · ${m.p} · ${m.e}</p>${H2(c,"ប្រវត្តិរូបសង្ខេប")}<p>សរសេរពីខ្លួនអ្នកក្នុង ២-៣ ប្រយោគ។</p>${H2(c,"បទពិសោធន៍ការងារ")}<p><b>តួនាទី</b> — ក្រុមហ៊ុន <i>(ឆ្នាំចាប់ផ្តើម - ឆ្នាំបញ្ចប់)</i></p><ul><li>ការងារដែលបានធ្វើ</li><li>លទ្ធផលដែលសម្រេចបាន</li></ul>${H2(c,"ការអប់រំ")}<p><b>កម្រិត/មុខវិជ្ជា</b> — សាកលវិទ្យាល័យ <i>(ឆ្នាំ)</i></p>${H2(c,"ជំនាញ")}<ul><li>ជំនាញទី ១</li><li>ជំនាញទី ២</li></ul>${H2(c,"ភាសា")}<p>ខ្មែរ (ភាសាកំណើត) · អង់គ្លេស (កម្រិត...)</p>`}},
+ cv2:{n:"CV សិស្ស/និស្សិត (ក្រហម)",i:"🎓",h:()=>{const m=me(),c="#d62828";return `<h1 style="text-align:center;margin:0;color:${c}">${m.n}</h1><p style="text-align:center;color:#555">${m.p} · ${m.e}</p>${H2(c,"ព័ត៌មានផ្ទាល់ខ្លួន")}<ul><li>ភេទ៖ ...</li><li>ថ្ងៃខែឆ្នាំកំណើត៖ ...</li><li>អាសយដ្ឋាន៖ ...</li></ul>${H2(c,"គោលដៅ")}<p>សរសេរគោលដៅអាជីពរបស់អ្នក។</p>${H2(c,"ការសិក្សា")}<p><b>សាលា/សាកលវិទ្យាល័យ</b> — ជំនាញ <i>(ឆ្នាំ)</i></p>${H2(c,"សកម្មភាព និងកិច្ចការស្ម័គ្រចិត្ត")}<ul><li>...</li></ul>${H2(c,"ជំនាញ")}<ul><li>...</li></ul>${H2(c,"អ្នកធានា/ឯកសារយោង")}<p>ឈ្មោះ · តួនាទី · លេខទូរស័ព្ទ</p>`}},
+ letter:{n:"សំបុត្រ/ពាក្យសុំ",i:"✉️",h:()=>{const m=me();return `<p style="text-align:center"><b>ព្រះរាជាណាចក្រកម្ពុជា</b><br><b>ជាតិ សាសនា ព្រះមហាក្សត្រ</b></p><p style="text-align:center">ថ្ងៃទី ... ខែ ... ឆ្នាំ ...</p><p><b>កម្មវត្ថុ៖</b> ...</p><p>សូមគោរពជូន ...</p><p>ខ្ញុំបាទ/នាងខ្ញុំ ឈ្មោះ ${m.n} ...</p><p style="text-align:right">ហត្ថលេខា<br><br>${m.n}</p>`}}
+};
+function clean(h){
+ const t=document.createElement("template");t.innerHTML=h;
+ t.content.querySelectorAll("script,iframe,object,embed,link,meta,form,base").forEach(n=>n.remove());
+ t.content.querySelectorAll("*").forEach(n=>{[...n.attributes].forEach(a=>{if(/^on/i.test(a.name)||/^\s*javascript:/i.test(a.value))n.removeAttribute(a.name)})});
+ return t.innerHTML;
+}
+function fit(){
+ const p=$("#paper"),k=Math.min(1,($("#edwrap").clientWidth-24)/PW),b=$("#paperbox");
+ p.style.transform=`scale(${k})`;b.style.width=PW*k+"px";b.style.height=p.offsetHeight*k+"px";
+}
+function setPaper(){
+ const P=DOC.p,z=SZ[P.s]||SZ.A4,l=P.o==="landscape",p=$("#paper");
+ PW=l?z[1]:z[0];
+ Object.assign(p.style,{width:PW+"px",minHeight:(l?z[0]:z[1])+"px",padding:P.m+"px",background:P.c,boxSizing:"border-box"});
+ $("#pgs").textContent=`@page{size:${P.s==="Letter"?"letter":P.s} ${P.o};margin:0}`;
+ fit();
+}
+function openDoc(d,k){
+ DOC=d?JSON.parse(JSON.stringify(d)):{id:Date.now(),title:TPL[k].n,html:TPL[k].h(),p:{s:"A4",o:"portrait",m:64,c:"#ffffff"}};
+ $("#edt").value=DOC.title;$("#paper").innerHTML=clean(DOC.html);
+ $("#ed").hidden=false;document.body.style.overflow="hidden";setPaper();dirty=0;
+}
+function saveDoc(){
+ DOC.title=$("#edt").value.trim()||"គ្មានចំណងជើង";DOC.html=clean($("#paper").innerHTML);DOC.ts=Date.now();
+ const l=U().docs,i=l.findIndex(x=>x.id===DOC.id);
+ if(i<0)l.unshift(DOC);else l[i]=DOC;
+ save();dirty=0;toast("✅ បានរក្សាទុក");
+}
+function closeDoc(){
+ if(dirty&&confirm("រក្សាទុកមុនចេញឬទេ? (OK = រក្សាទុក, Cancel = មិនរក្សាទុក)"))saveDoc();
+ $("#ed").hidden=true;document.body.style.overflow="";DOC=null;V.page="you";V.tab="docs";render();
+}
+function ex(c,v){
+ $("#paper").focus();
+ if(SELR){const s=getSelection();s.removeAllRanges();s.addRange(SELR)}
+ try{document.execCommand("styleWithCSS",false,true)}catch(e){}
+ document.execCommand(c,false,v);dirty=1;fit();
+}
+function docsList(u){
+ const l=u.docs||[];
+ return `<div class="act" style="margin-bottom:12px"><button class="pill on" data-a="newdoc">＋ ឯកសារថ្មី</button></div>`+(l.length?l.map(d=>`<div class="cm"><div style="flex:1;min-width:0"><b>${esc(d.title)}</b><div class="s">${new Date(d.ts||d.id).toLocaleDateString()} · ${esc(d.p.s)}</div></div><button class="pill" data-a="docopen" data-i="${d.id}">✎ បើក</button><button class="pill" data-a="docdel" data-i="${d.id}">លុប</button></div>`).join(""):`<div class="empty">មិនទាន់មានឯកសារទេ។ ចុច ＋ ដើម្បីសរសេរប្លុក ឬធ្វើ CV។</div>`);
+}
+document.addEventListener("selectionchange",()=>{const s=getSelection();if(s.rangeCount&&$("#paper").contains(s.anchorNode))SELR=s.getRangeAt(0).cloneRange()});
+$("#hb").addEventListener("mousedown",e=>{if(e.target.closest("button"))e.preventDefault()});
+$("#hb").addEventListener("click",e=>{const b=e.target.closest("button[data-c]");if(b)ex(b.dataset.c,b.dataset.v)});
+$("#hbf").onchange=e=>ex("fontName",e.target.value);
+$("#hbs").onchange=e=>{if(e.target.value)ex("fontSize",e.target.value);e.target.value=""};
+$("#hbb").onchange=e=>ex("formatBlock","<"+e.target.value+">");
+$("#hbc").onchange=e=>ex("foreColor",e.target.value);
+$("#hbh").onchange=e=>ex("hiliteColor",e.target.value);
+$("#paper").addEventListener("input",()=>{dirty=1;fit()});
+[["pps","s"],["ppo","o"],["ppm","m"],["ppc","c"]].forEach(([i,k])=>$("#"+i).addEventListener("change",e=>{if(!DOC)return;DOC.p[k]=k==="m"?+e.target.value:e.target.value;dirty=1;setPaper()}));
+addEventListener("resize",()=>{if(!$("#ed").hidden)fit()});
+function chk(f,k){
+ if(/\.(apk|apks|xapk|exe|msi|bat|cmd|scr|vbs|js|jar|sh|dll|zip|rar|7z)$/i.test(f.name))return "⛔ ឯកសារប្រភេទនេះអាចមានគ្រោះថ្នាក់ មិនអនុញ្ញាតទេ។";
+ if(!f.type.startsWith(k==="photo"?"image/":k==="audio"?"audio/":"video/"))return "⛔ សូមជ្រើសរើស"+(k==="photo"?"រូបថត":k==="audio"?"ឯកសារអូឌីយ៉ូ":"វីដេអូ")+"ប៉ុណ្ណោះ។";
+ return "";
+}
+$("#uf").addEventListener("change",()=>{
+ const f=$("#uf").files[0];if(!f)return;
+ const b=chk(f,$("#uk").value);
+ if(b){$("#um").textContent=b;$("#uf").value=""}
+ else $("#um").textContent="⚠️ ឯកសារពីខាងក្រៅ៖ ត្រូវប្រាកដថាទុកចិត្តប្រភព មុនបង្ហោះ។";
+});
+const ytid=u=>{const m=String(u).match(/(?:youtu\.be\/|v=|shorts\/|embed\/|live\/)([\w-]{11})/);return m?m[1]:null};
+function social(){
+ const L=(s,k)=>`<div class="soc"><a class="sc" target="_blank" rel="noopener" href="${esc((S.soc||{})[s[0]]||s[3])}"><span class="si" style="background:${s[2]}">${s[1]}</span><b>${s[0]}</b></a><button class="pill" data-a="sedit" data-i="${k}" aria-label="កែតំណ">✎</button></div>`;
+ return `<div class="wal"><div class="box"><h3>📰 PC School Cambodia</h3><p class="s" style="margin:4px 0 10px">គេហទំព័រ/ប្លុករបស់យើង</p><a class="pill on" target="_blank" rel="noopener" href="${BLOG}">បើកគេហទំព័រ</a></div>
+ <div class="box"><h3>បណ្តាញសង្គម</h3><p class="s">ចុចដើម្បីបើក។ ចុច ✎ ដើម្បីដាក់តំណគណនី/ទំព័ររបស់អ្នក (ត្រូវចាប់ផ្តើមដោយ https://)។</p><div class="socg">${SOC.map(L).join("")}</div></div></div>`;
+}
+let SEC=null;
+async function secCheck(){
+ const r=[],P=(s,t,d)=>r.push({s,t,d});
+ P(window.isSecureContext?"ok":"warn","ការតភ្ជាប់សុវត្ថិភាព (HTTPS)",window.isSecureContext?"កម្មវិធីដំណើរការក្នុងបរិយាកាសសុវត្ថិភាព។":"កម្មវិធីមិនដំណើរការក្នុងបរិយាកាសសុវត្ថិភាព។ សូមប្រើ HTTPS។");
+ const c=+((navigator.userAgent.match(/Chrome\/(\d+)/)||[])[1]||0);
+ if(c)P(c<100?"bad":c<120?"warn":"ok","កំណែ WebView/Chrome៖ "+c,c<120?"ចាស់។ សូមអាប់ដេត Android System WebView និង Chrome ក្នុង Play Store។":"ថ្មីគ្រប់គ្រាន់។");
+ else P("info","មិនស្គាល់កំណែ WebView","ពិនិត្យមិនបាន។");
+ try{if(navigator.userAgentData&&navigator.userAgentData.platform==="Android"){const h=await navigator.userAgentData.getHighEntropyValues(["platformVersion"]),a=parseInt(h.platformVersion);if(a)P(a<10?"bad":a<12?"warn":"ok","កំណែ Android៖ "+h.platformVersion,a<12?"ប្រព័ន្ធចាស់ អាចខ្វះការអាប់ដេតសុវត្ថិភាព។ សូមអាប់ដេតបើអាច។":"ថ្មីគ្រប់គ្រាន់។")}}catch(e){}
+ P(navigator.onLine?"ok":"warn","អ៊ីនធឺណិត",navigator.onLine?"មានការតភ្ជាប់។":"គ្មានការតភ្ជាប់។");
+ const g=[];
+ for(const n of ["camera","microphone","geolocation","notifications"]){try{const q=await navigator.permissions.query({name:n});if(q.state==="granted")g.push(n)}catch(e){}}
+ P("info","ការអនុញ្ញាតដែលកម្មវិធីមាន",g.length?g.join(", ")+" (បិទវិញបើមិនចាំបាច់)":"គ្មានការអនុញ្ញាតរសើបទេ។");
+ try{const e=await navigator.storage.estimate(),p=e.usage/e.quota;P(p>.9?"warn":"ok","ទំហំផ្ទុកក្នុងកម្មវិធី",`ប្រើ ${fmtB(e.usage)} ពី ${fmtB(e.quota)}`+(p>.9?" ជិតពេញ។":""))}catch(e){}
+ try{const ps=await navigator.storage.persisted();P(ps?"ok":"info","ការរក្សាទុកអចិន្ត្រៃយ៍",ps?"បើក៖ ប្រព័ន្ធមិនលុបទិន្នន័យកម្មវិធីដោយស្វ័យប្រវត្តិទេ។":"មិនទាន់បើក៖ បើទូរស័ព្ទជិតពេញ ប្រព័ន្ធអាចលុបទិន្នន័យ។ គួរទុកទំហំទំនេរឲ្យគ្រប់គ្រាន់។")}catch(e){}
+ return r;
+}
+async function secRun(){
+ if(secRun.b)return;secRun.b=1;
+ try{SEC=await secCheck()}finally{secRun.b=0}
+ if(V.page==="security")render();
+}
+function security(){
+ if(!SEC){secRun();return `<div class="empty">កំពុងពិនិត្យ...</div>`}
+ const n=SEC.filter(x=>x.s==="warn"||x.s==="bad").length,I={ok:"✅",warn:"⚠️",bad:"❌",info:"ℹ️"};
+ return `<div class="wal"><div class="box"><h3>🛡 ពិនិត្យសុវត្ថិភាព</h3>
+ <p class="s">ចំណាំ៖ នេះមិនមែនជាកម្មវិធីកម្ចាត់មេរោគទេ ហើយមិនអាចស្កេនរកមេរោគក្នុងទូរស័ព្ទបានទេ (Android មិនអនុញ្ញាតឲ្យកម្មវិធីបែបនេះអាចចូលមើលកម្មវិធី/ឯកសារផ្សេងៗ)។ វាពិនិត្យតែចំណុចដែលអាចមើលឃើញប៉ុណ្ណោះ។ សម្រាប់ស្កេនមេរោគពិតប្រាកដ សូមប្រើ Google Play Protect (Play Store → រូបគណនី → Play Protect → ស្កេន)។</p></div>
+ <div class="box"><h3>${n?`⚠️ មាន ${n} ចំណុចត្រូវយកចិត្តទុកដាក់`:"✅ មិនឃើញបញ្ហាដែលកម្មវិធីអាចពិនិត្យបាន"}</h3>
+ ${SEC.map(x=>`<div class="res"><span>${I[x.s]}</span><div><b>${esc(x.t)}</b><div class="s">${esc(x.d)}</div></div></div>`).join("")}
+ <div class="act" style="margin-top:12px"><button class="pill on" data-a="secrun">ពិនិត្យម្តងទៀត</button></div></div>
+ ${S.user?`<div class="box"><h3>ព័ត៌មានគណនី</h3>
+ <div class="res"><span>✉️</span><div><b>${esc(S.user.email||"គ្មាន Gmail")}</b><div class="s">ចូលតាម Google ដើម្បីភ្ជាប់ Gmail</div></div></div>
+ <div class="res"><span>📱</span><div style="flex:1"><b>${esc(S.user.phone||"មិនទាន់បញ្ចូល")}</b><div class="s">បញ្ចូលដោយខ្លួនឯង មិនទាន់ផ្ទៀងផ្ទាត់ (ត្រូវការ SMS តាម backend)</div></div><button class="pill" data-a="phone">កែ</button></div></div>`:""}</div>`;
+}
+$("#dys").onclick=()=>{
+ const r=parseLink($("#dyu").value);
+ if(!r){$("#dym").textContent="តំណមិនត្រឹមត្រូវ (ត្រូវចាប់ផ្តើមដោយ https://)";return}
+ const c=$("#dyc").value,pr=Math.max(0,Math.min(100000,parseInt($("#dypr").value)||0)),fr=pr&&$("#dyfr").checked?1:0;
+ if(pr&&!S.user){$("#dym").textContent="ចូលគណនីជាមុនដើម្បីកំណត់តម្លៃ";return}
+ if(pr&&!$("#dyow").checked){$("#dym").textContent="សូមបញ្ជាក់ថាអ្នកមានសិទ្ធិលក់មាតិកានេះ";return}
+ S.yt.push({id:Date.now(),k:r.kind==="audio"?"audio":"video",o:S.user?S.user.id:"",pr,fr,yt:r.yt,emb:r.emb,link:r.link,kind:r.kind,u:(r.kind==="mp4"||r.kind==="audio")?r.link:undefined,t:$("#dyt").value.trim()||(r.ch+" · "+new URL(r.link).hostname),ch:r.ch,cat:c,my:1,x:""});
+ note(S.yt[S.yt.length-1]);save();$("#dyu").value=$("#dyt").value="";resetDy();$("#dy").close();V.cat=c;V.q="";go("home");
+};
+
+document.addEventListener("click",e=>{
+ const t=e.target.closest("[data-a],[data-v],[data-p],[data-c],[data-t],[data-ph],[data-ph2],[data-l],[data-st],[data-mc]");
+ if(!t){const v=e.target;if(v.tagName==="VIDEO"&&v.closest(".reel"))v.paused?v.play():v.pause();return}
+ const d=t.dataset;
+ if(d.v)return open(+d.v);
+ if(d.p)return go(d.p);
+ if(d.c){V.cat=d.c;V.q="";return render()}
+ if(d.t){V.tab=d.t;return render()}
+ if(d.ph)return lb(+d.ph);
+ if(d.ph2)return lb2(d.ph2);
+ if(d.l){V.lang=d.l;return render()}
+ if(d.st){V.st=d.st;return render()}
+ if(d.mc){V.mc=d.mc;return render()}
+ const a=d.a,id=+d.i||0,v=all().find(x=>x.id===id);
+ if(a==="in")openIn();
+ else if(a==="out"){S.user=null;save();go("home")}
+ else if(a==="up"){if(need()){resetUp();$("#um").textContent="Data៖ "+fmtB(used())+" / "+fmtB(lim());$("#du").showModal()}}
+ else if(a==="like"){if(!need())return;tg(U().likes,id);V.page==="reels"?t.classList.toggle("on"):rr()}
+ else if(a==="later"){if(!need())return;tg(U().later,id);rr()}
+ else if(a==="sub"){if(!need())return;tg(U().subs,d.i);rr()}
+ else if(a==="snd"){V.snd=!V.snd;document.querySelectorAll(".reel video").forEach(x=>x.muted=!V.snd);t.textContent=V.snd?"🔊":"🔇"}
+ else if(a==="share"&&v){
+  S.sh["v"+v.id]=(S.sh["v"+v.id]||0)+1;save();
+  if(V.page==="watch")rr();
+  const data={title:v.t};if(locked(v)){}else if(v.link||v.yt)data.url=v.link||"https://youtu.be/"+v.yt;else if(!v.local)data.url=v.u;
+  if(navigator.share)navigator.share(data).catch(()=>{});
+  else if(navigator.clipboard&&data.url)navigator.clipboard.writeText(data.url).then(()=>alert("បានចម្លងតំណ")).catch(()=>{});
+ }
+ else if(a==="upk"){if(need()){$("#uk").value=d.k;$("#uf").accept=d.k==="photo"?"image/*":d.k==="audio"?"audio/*":"video/*";resetUp();$("#ucat").value=d.cat||"";$("#um").textContent="Data៖ "+fmtB(used())+" / "+fmtB(lim());$("#du").showModal()}}
+ else if(a==="trsrc"){V.trsrc=d.k==="en"?"en":"km";V.trl="all";V.trres=[];render()}
+ else if(a==="trgo")trGo();
+ else if(a==="trsay"){const r=(V.trres||[]).find(z=>z.code===d.k);if(r&&r.txt)say(r.txt,r.tts)}
+ else if(a==="trcp"){const r=(V.trres||[]).find(z=>z.code===d.k);if(r&&r.txt&&navigator.clipboard)navigator.clipboard.writeText(r.txt).then(()=>toast("បានចម្លង")).catch(()=>{})}
+ else if(a==="fpost")doFeed();
+ else if(a==="tofeed"){V.cat="feed";go("home")}
+ else if(a==="flike"){
+  if(!need())return;const p=(S.feed||[]).find(z=>z.id===id);if(!p)return;
+  p.likes=p.likes||[];tg(p.likes,S.user.id);t.classList.toggle("on",p.likes.includes(S.user.id));t.textContent="♥ "+p.likes.length;
+ }
+ else if(a==="fcmt"){const c=t.closest(".fc").querySelector(".fcm");c.hidden=!c.hidden;if(!c.hidden){const i=c.querySelector(".fci");if(i)i.focus()}}
+ else if(a==="fcm"){
+  if(!need())return;const card=t.closest(".fc"),p=(S.feed||[]).find(z=>z.id===id),i=card.querySelector(".fci"),x=i.value.trim();
+  if(!p||!x)return;(p.cm=p.cm||[]).push({n:S.user.name,t:x,ts:Date.now()});save();i.value="";
+  card.querySelector(".fcl").innerHTML=fcl(p);card.querySelector("[data-a=fcmt]").textContent="💬 "+p.cm.length;
+ }
+ else if(a==="fshare"){
+  const p=(S.feed||[]).find(z=>z.id===id);if(!p)return;
+  S.sh["f"+id]=(S.sh["f"+id]||0)+1;save();t.textContent="↗ "+S.sh["f"+id];
+  const x={title:"VidKH",text:(p.t||"").slice(0,200)};
+  if(navigator.share)navigator.share(x).catch(()=>{});
+  else if(navigator.clipboard&&x.text)navigator.clipboard.writeText(x.text).then(()=>toast("បានចម្លង")).catch(()=>{});
+ }
+ else if(a==="fdl"){
+  const p=(S.feed||[]).find(z=>z.id===id);if(!p)return;
+  if(locked(p,"f"+p.id)){toast("🔒 ត្រូវបង់កាក់ជាមុន");return}
+  (async()=>{let i=0;for(const m of(p.media||[]))await dl(URLS[m.id],"vidkh-"+p.id+"-"+(++i))})();
+ }
+ else if(a==="fdel"){
+  const p=(S.feed||[]).find(z=>z.id===id);if(!p||!confirm("លុបការបង្ហោះនេះមែនទេ?"))return;
+  (p.media||[]).forEach(m=>{drop(m.id);if(URLS[m.id]){URL.revokeObjectURL(URLS[m.id]);delete URLS[m.id]}});
+  S.feed=S.feed.filter(z=>z.id!==id);S.notes=(S.notes||[]).filter(n=>n.vid!==id);save();render();
+ }
+ else if(a==="vdl"&&v){
+  if(locked(v)){toast("🔒 ត្រូវបង់កាក់ជាមុន");return}
+  if(v.local)dl(src(v),v.t);
+  else if(v.link){const l=document.createElement("a");l.href=v.link;l.target="_blank";l.rel="noopener";l.setAttribute("download","");document.body.appendChild(l);l.click();l.remove()}
+ }
+ else if(a==="sell"){if(!need())return;["mkn","mkp","mkl","mkv","mkf"].forEach(i=>$("#"+i).value="");$("#mkm").textContent="";$("#dmk").showModal()}
+ else if(a==="mdel"){
+  const x=(S.shop||[]).find(z=>z.id===id);if(!x||!confirm("លុបទំនិញនេះមែនទេ?"))return;
+  if(x.ph){drop(x.ph);if(URLS[x.ph]){URL.revokeObjectURL(URLS[x.ph]);delete URLS[x.ph]}}
+  S.shop=S.shop.filter(z=>z.id!==id);S.notes=(S.notes||[]).filter(n=>n.vid!==id);save();render();
+ }
+ else if(a==="unlock"){
+  const key=d.k+id,it=d.k==="f"?(S.feed||[]).find(z=>z.id===id):all().find(z=>z.id===id);
+  if(!it)return;
+  if(unlock(key,it)){
+   if(V.page==="watch")rr();
+   else if(V.page==="reels"){render();const r=document.querySelector('.reel[data-id="'+id+'"]');if(r)r.scrollIntoView()}
+   else render();
+  }
+ }
+ else if(a==="tvcc"){
+  const k=d.k;V.tvdata=V.tvdata||{};if(V.tvdata[k]==="err")delete V.tvdata[k];
+  V.tvcc=k;V.tvq="";V.tvn=60;V.tvcur=null;tvStop();render();
+ }
+ else if(a==="tvch"){const c=(V.tvf||[])[id];if(c)tvPlay(c)}
+ else if(a==="tvmore"){V.tvn=(V.tvn||60)+60;tvList()}
+ else if(a==="tvx"){V.tvcur=null;tvStop();const b=$("#tvpw");if(b)b.innerHTML=""}
+ else if(a==="tvcp"){if(V.tvcur&&navigator.clipboard)navigator.clipboard.writeText(V.tvcur.url).then(()=>toast("បានចម្លងតំណ")).catch(()=>{})}
+ else if(a==="say"){say(LES[V.lang][+d.i][0],LANGS[V.lang].tts)}
+ else if(a==="post")doPost();
+ else if(a==="pshare"){
+  const q=(S.posts||[]).find(z=>z.id===id);if(!q)return;
+  S.sh["p"+id]=(S.sh["p"+id]||0)+1;save();
+  const x={title:"VidKH",text:(q.t||"").slice(0,200)};
+  if(navigator.share)navigator.share(x).catch(()=>{});
+  else if(navigator.clipboard&&x.text)navigator.clipboard.writeText(x.text).then(()=>toast("បានចម្លង")).catch(()=>{});
+  render();
+ }
+ else if(a==="plike"){
+  if(!need())return;const p=(S.posts||[]).find(z=>z.id===id);if(!p)return;
+  p.likes=p.likes||[];tg(p.likes,S.user.id);render();
+ }
+ else if(a==="pcm"){
+  if(!need())return;const p=(S.posts||[]).find(z=>z.id===id),x=(prompt("សរសេរមតិ")||"").trim();
+  if(!p||!x)return;(p.cm=p.cm||[]).push({n:S.user.name,t:x});save();render();
+ }
+ else if(a==="pdel"){
+  const p=(S.posts||[]).find(z=>z.id===id);if(!p||!confirm("លុបសារនេះមែនទេ?"))return;
+  (p.imgs||[]).forEach(m=>{drop(m.id);if(URLS[m.id]){URL.revokeObjectURL(URLS[m.id]);delete URLS[m.id]}});
+  S.posts=S.posts.filter(z=>z.id!==id);S.notes=(S.notes||[]).filter(n=>n.vid!==id);save();render();
+ }
+ else if(a==="gq")gask(d.k);
+ else if(a==="gogo"){$("#dg").close();go(d.k)}
+ else if(a==="guide")openGuide(false);
+ else if(a==="bell"){
+  const t=seenTs(),l=S.notes||[];
+  $("#dnl").innerHTML=l.length?l.map(n=>{const k=NK(n),un=n.ts>t&&!mineNote(n);return `<button class="nt ${un?"un":""}" data-a="nopen" data-i="${n.id}"><span class="ni">${k[0]}</span><div><b>${mineNote(n)?"អ្នក":esc(n.by)} បានបង្ហោះ${k[1]}ថ្មី</b><div class="t">${esc(n.t)}</div><div class="s">${ago(n.ts)}</div></div>${un?'<i class="dt"></i>':""}</button>`}).join(""):`<div class="empty">មិនទាន់មានការជូនដំណឹងទេ។</div>`;
+  if(S.user)U().seen=Date.now();else S.gseen=Date.now();
+  save();bell();$("#dn").showModal();
+ }
+ else if(a==="nopen"){
+  const n=(S.notes||[]).find(z=>z.id===id);$("#dn").close();if(!n)return;
+  if(n.k==="feed"){V.cat="feed";go("home");return}
+  if(n.k==="item"){V.cat="market";go("home");return}
+  if(n.k==="post"){if(!(S.posts||[]).some(z=>z.id===n.vid)){toast("សារនេះត្រូវបានលុបហើយ");return}V.lang=n.lang||"zh";V.st="post";go("study");return}
+  const x=all().find(z=>z.id===n.vid);
+  if(!x){toast("មាតិកានេះត្រូវបានលុបហើយ");return}
+  x.k==="photo"?lb(x.id):x.k==="reel"?go("reels"):open(x.id);
+ }
+ else if(a==="newdoc"){
+  if(!need())return;
+  $("#dtl").innerHTML=Object.entries(TPL).map(([k,t])=>`<button class="sc" data-a="tpl" data-k="${k}"><span class="si" style="background:var(--ac)">${t.i}</span><b>${t.n}</b></button>`).join("");
+  $("#dt").showModal();
+ }
+ else if(a==="tpl"){$("#dt").close();openDoc(null,d.k)}
+ else if(a==="docopen"){const x=U().docs.find(z=>z.id===id);if(x)openDoc(x)}
+ else if(a==="docdel"){if(confirm("លុបឯកសារនេះមែនទេ?")){U().docs=U().docs.filter(z=>z.id!==id);save();render()}}
+ else if(a==="edclose")closeDoc();
+ else if(a==="edsave")saveDoc();
+ else if(a==="edprint")window.print();
+ else if(a==="edpaper"&&DOC){$("#pps").value=DOC.p.s;$("#ppo").value=DOC.p.o;$("#ppm").value=String(DOC.p.m);$("#ppc").value=DOC.p.c;$("#dp").showModal()}
+ else if(a==="edcopy"){
+  if(navigator.clipboard)navigator.clipboard.writeText(clean($("#paper").innerHTML)).then(()=>toast("បានចម្លង HTML។ បិទភ្ជាប់ក្នុង Blogger (HTML view)")).catch(()=>toast("ចម្លងមិនបាន"));
+ }
+ else if(a==="yadd"){resetDy();$("#dym").textContent="";$("#dyc").value=YQ[V.cat]?V.cat:"video";$("#dy").showModal()}
+ else if(a==="ytdel"&&v){if(confirm("លុបវីដេអូនេះមែនទេ?")){S.yt=S.yt.filter(x=>x.id!==id);S.notes=(S.notes||[]).filter(n=>n.vid!==id);save();go("home")}}
+ else if(a==="sedit"){
+  const sc=SOC[+d.i],x=prompt("តំណ "+sc[0],(S.soc||{})[sc[0]]||sc[3]);
+  if(x===null)return;
+  if(/^https:\/\//i.test(x.trim())){(S.soc=S.soc||{})[sc[0]]=x.trim();save();render()}else toast("តំណត្រូវចាប់ផ្តើមដោយ https://");
+ }
+ else if(a==="secrun"){SEC=null;render()}
+ else if(a==="phone"){
+  const x=prompt("លេខទូរស័ព្ទ (ឧ. +85512345678)",S.user.phone||"");
+  if(x===null)return;
+  if(/^\+?\d{8,15}$/.test(x.trim())){S.user.phone=x.trim();save();render()}else toast("លេខទូរស័ព្ទមិនត្រឹមត្រូវ");
+ }
+ else if(a==="edit"){if($("#lb").open)$("#lb").close();openEd(id)}
+ else if(a==="rot"&&ED){ED.rot=(ED.rot+1)%4;drawEd()}
+ else if(a==="auto"&&ED){$("#eb").value=108;$("#ec").value=112;$("#es").value=118;drawEd()}
+ else if(a==="theme")theme();
+ else if(a==="h12"){S.h12=!S.h12;save();tick();render()}
+ else if(a==="lclaim"){
+  if(!need())return;const l=lmis();
+  if(l.sec<LGOAL||l.c===today())return;
+  U().coins+=LREW;l.c=today();save();toast("🪙 +"+LREW);render();
+ }
+ else if(a==="claim"){
+  if(!need())return;const u=U(),m=mis();
+  if(m.sec<GOAL||m.c===today())return;
+  const r=REW[m.day-1];u.coins+=r;m.c=today();m.day=m.day%7+1;save();toast("🪙 +"+r);render();
+ }
+ else if(a==="buy"){
+  if(!need())return;const u=U(),p=(d.k==="d"?DATA:AIP)[+d.i];
+  if(!p)return;
+  if(u.coins<p[1]){toast("កាក់មិនគ្រប់");return}
+  u.coins-=p[1];if(d.k==="d")u.gb+=p[0];else u.ai+=p[0];
+  save();toast("ទិញបានជោគជ័យ");render();
+ }
+ else if(a==="cmt"){
+  if(!need())return;const i=$("#ci"),x=i.value.trim();if(!x)return;
+  (S.cm[id]=S.cm[id]||[]).unshift({n:S.user.name,t:x});save();rr();
+ }
+ else if(a==="cm"){
+  if(!need())return;const x=(prompt("សរសេរមតិ")||"").trim();if(!x)return;
+  (S.cm[id]=S.cm[id]||[]).unshift({n:S.user.name,t:x});save();t.querySelector("small").textContent=S.cm[id].length;
+ }
+ else if(a==="del"&&v){
+  if(!confirm("លុបមាតិកានេះមែនទេ?"))return;
+  S.mine=S.mine.filter(x=>x.id!==id);S.notes=(S.notes||[]).filter(n=>n.vid!==id);drop(id);
+  if(URLS[id]){URL.revokeObjectURL(URLS[id]);delete URLS[id]}
+  save();if($("#lb").open)$("#lb").close();
+  V.page==="watch"?go("home"):render();
+ }
+});
+$("#sf").onsubmit=e=>{e.preventDefault();V.q=$("#q").value.trim();go("home")};
+$("#th").onclick=theme;
+$("#lok").onclick=()=>{const n=$("#ln").value.trim();if(n)login({id:"l:"+n.toLowerCase(),name:n})};
+$("#uk").onchange=()=>{const k=$("#uk").value;$("#uf").accept=k==="photo"?"image/*":k==="audio"?"audio/*":"video/*"};
+$("#us").onclick=async()=>{
+ const f=$("#uf").files[0],m=$("#um");
+ if(!f){m.textContent="សូមជ្រើសរើសឯកសារ";return}
+ const bad=chk(f,$("#uk").value);if(bad){m.textContent=bad;return}
+ if(used()+f.size>lim()){m.textContent="Data ពេញ។ សូមទិញដាតាបន្ថែមក្នុងទំព័ររង្វាន់។";return}
+ const pr=Math.max(0,Math.min(100000,parseInt($("#upr").value)||0)),fr=pr&&$("#ufr").checked?1:0;
+ if(pr&&!$("#uow").checked){m.textContent="សូមបញ្ជាក់ថាអ្នកជាម្ចាស់ ឬមានសិទ្ធិលក់មាតិកានេះ";return}
+ const k=$("#uk").value,id=Date.now();m.textContent="កំពុងរក្សាទុក...";
+ try{await put(id,f)}catch(e){m.textContent="រក្សាទុកមិនបាន (ទំហំពេញ ឬមិនគាំទ្រ)";return}
+ URLS[id]=URL.createObjectURL(f);
+ const d=k==="photo"?"":await dur(URLS[id]);
+ const cat=$("#ucat").value;S.mine.push({id,k,t:$("#ut").value.trim()||f.name,ch:S.user.name,o:S.user.id,local:1,v:0,x:"",d,sz:f.size,pr,fr,cat:cat||undefined});note(S.mine[S.mine.length-1]);save();
+ $("#ut").value="";$("#uf").value="";resetUp();$("#du").close();
+ V.cat=(k==="video"||k==="audio")&&cat?cat:"all";go(k==="photo"?"photos":k==="reel"?"reels":k==="movie"?"movies":"home");
+ toast("✅ បានរក្សាទុកច្បាប់ចម្លងក្នុងកម្មវិធី។ អាចលុបឯកសារដើមពីទូរស័ព្ទបាន");
+};
+tick();
+setInterval(()=>{
+ tick();
+ const fr=document.querySelector("iframe.player"),pk=fr?(fr.dataset.pk||""):"";
+ if(!fr){EP=false;EMB.src="";EMB.touched=false;EMB.api=false}
+ else{
+  if(EMB.src!==fr.src){EMB.src=fr.src;EMB.touched=false;EMB.api=false;EP=false}
+  if(document.activeElement===fr)EMB.touched=true;
+ }
+ const embOn=!!fr&&(((pk==="yt"||pk==="vm")&&EMB.api)?EP:EMB.touched);
+ const on=document.visibilityState==="visible"&&(embOn||[...document.querySelectorAll("#pl,.reel video")].some(v=>!v.paused&&!v.ended&&v.readyState>2));
+ const cur=V.page==="watch"?all().find(x=>x.id===V.cur):null,isLink=!!(cur&&(cur.link||cur.yt));
+ const el=$("#msc");
+ if(el){
+  if(!S.user)el.textContent="🪙 ចូលគណនីដើម្បីទទួលកាក់ពីបេសកកម្ម";
+  else{
+   const m=mis(),l=lmis();
+   el.textContent=(m.sec>=GOAL?"🪙 បេសកកម្មថ្ងៃនេះចប់ហើយ ✅":"🪙 បេសកកម្ម៖ "+mmss(m.sec)+" / "+mmss(GOAL)+(on?" · កំពុងរាប់":(fr&&!embOn?" · ចុចចាក់វីដេអូដើម្បីចាប់ផ្តើមរាប់":" · ផ្អាក")))+(isLink?" · 🔗 "+(l.sec>=LGOAL?"ចប់ ✅":mmss(l.sec)+" / "+mmss(LGOAL)):"");
+  }
+ }
+ if(!S.user||!on)return;
+ const m=mis();
+ if(m.sec<GOAL){m.sec++;if(m.sec%5===0||m.sec===GOAL)save();if(m.sec===GOAL)toast("🎉 បេសកកម្មថ្ងៃនេះចប់ហើយ! ចុច 🪙 ដើម្បីទទួលកាក់")}
+ if(isLink){const l=lmis();if(l.sec<LGOAL){l.sec++;if(l.sec%5===0||l.sec===LGOAL)save();if(l.sec===LGOAL)toast("🎉 បេសកកម្មតំណចប់ហើយ! ចុច 🪙 ដើម្បីទទួលកាក់")}}
+},1000);
+(async()=>{
+ try{if(navigator.storage&&navigator.storage.persist)navigator.storage.persist()}catch(e){}
+ URLS=await loadAll();
+ render();
+ secCheck().then(r=>{SEC=r;const n=r.filter(x=>x.s==="warn"||x.s==="bad").length;if(n)toast("⚠️ ពិនិត្យសុវត្ថិភាព៖ មាន "+n+" ចំណុច។ មើលក្នុង ខ្ញុំ → សុវត្ថិភាព")});
+})();
+</script>
+</body>
+</html>
