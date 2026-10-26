@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="km">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VidKH Client Dashboard</title>
+    <style>
+        body { font-family: 'Khmer OS Battambang', sans-serif; background: #f0f2f5; margin: 0; padding: 20px; color: #333; }
+        .container { max-width: 1000px; margin: 0 auto; background: white; padding: 20px; border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
+        h1, h2 { color: #007bff; border-bottom: 2px solid #eeeff2; padding-bottom: 8px; }
+        .section { margin-bottom: 30px; padding: 15px; border: 1px solid #e3e6f0; border-radius: 6px; background: #fafafa; }
+        .form-group { margin-bottom: 12px; }
+        label { display: block; font-weight: bold; margin-bottom: 5px; }
+        input[type="text"], input[type="password"], textarea, select { width: 100%; padding: 8px; box-sizing: border-box; border: 1px solid #ccc; border-radius: 4px; }
+        button { background: #007bff; color: white; border: none; padding: 10px 15px; border-radius: 4px; cursor: pointer; font-size: 14px; }
+        button:hover { background: #0056b3; }
+        .error { color: red; font-weight: bold; margin-top: 5px; }
+        .success { color: green; font-weight: bold; margin-top: 5px; }
+        .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 15px; margin-top: 15px; }
+        .card { background: white; border: 1px solid #ddd; padding: 10px; border-radius: 6px; text-align: center; }
+        .card img { max-width: 100%; height: 100px; object-fit: cover; border-radius: 4px; }
+        .ad-banner { background: #fff3cd; border: 1px solid #ffeeba; padding: 10px; margin-bottom: 10px; border-radius: 4px; }
+        .ad-banner img { max-width: 150px; display: block; margin-top: 5px; }
+        .ai-box { background: #e2e3e5; padding: 15px; border-radius: 4px; min-height: 50px; white-space: pre-wrap; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>VidKH Portal Control</h1>
+    
+    <!-- 1. USER PROFILE & AUTH -->
+    <div class="section" id="auth-section">
+        <h2>គណនី និងការចូលប្រើប្រាស់ (Auth & Profile)</h2>
+        <div id="auth-forms">
+            <div class="form-group">
+                <label>ឈ្មោះអ្នកប្រើប្រាស់ (Username)</label>
+                <input type="text" id="username" placeholder="បញ្ចូលឈ្មោះ...">
+            </div>
+            <div class="form-group">
+                <label>ពាក្យសម្ងាត់ (Password)</label>
+                <input type="password" id="password" placeholder="យ៉ាងហោចណាស់ ៦ តួ...">
+            </div>
+            <button onclick="handleAuth('signup')">ចុះឈ្មោះថ្មី (Signup)</button>
+            <button onclick="handleAuth('login')">ចូលគណនី (Login)</button>
+        </div>
+        
+        <div id="user-profile" style="display:none;">
+            <p>ស្វាគមន៍! <strong id="profile-name"></strong> | កាក់របស់អ្នក៖ <strong id="profile-coins" style="color: gold; background: #333; padding: 2px 6px; border-radius: 4px;">0</strong> កាក់</p>
+            <button onclick="logout()" style="background:#dc3545;">ចាកចេញ (Logout)</button>
+        </div>
+        <div id="auth-msg"></div>
+    </div>
+
+    <!-- 2. VIDSTORE (APK UPLOAD & LIST) -->
+    <div class="section">
+        <h2>ហាងកម្មវិធី (VidStore)</h2>
+        <div class="form-group">
+            <label>ឈ្មោះកម្មវិធី (App Name)</label>
+            <input type="text" id="app-name" placeholder="ឈ្មោះ App...">
+        </div>
+        <div class="form-group">
+            <label>ជ្រើសរើសឯកសារ APK</label>
+            <input type="file" id="app-file" accept=".apk">
+        </div>
+        <div class="form-group">
+            <label>រូបថតកម្មវិធី (ត្រូវការច្បាស់ជាដាច់ខាត ៣ សន្លឹក)</label>
+            <input type="file" id="app-photos" accept="image/*" multiple>
+        </div>
+        <button onclick="uploadApp()">បង្ហោះកម្មវិធី (ចំណាយ 50 កាក់)</button>
+        <div id="store-msg"></div>
+
+        <h3>កម្មវិធីដែលមានស្រាប់</h3>
+        <button onclick="loadApps()">ទាញយកបញ្ជី App ឡើងវិញ</button>
+        <div class="grid" id="apps-list"></div>
+    </div>
+
+    <!-- 3. ADS SYSTEM -->
+    <div class="section">
+        <h2>ប្រព័ន្ធពាណិជ្ជកម្ម (Ads)</h2>
+        <div id="active-ads"></div>
+        
+        <div class="form-group">
+            <label>អត្ថបទពាណិជ្ជកម្ម (ក្រោម 60តួ=20កាក់, លើស60តួ=50កាក់)</label>
+            <textarea id="ad-text" placeholder="សរសេររៀបរាប់..."></textarea>
+        </div>
+        <div class="form-group">
+            <label>រូបភាពពាណិជ្ជកម្ម (ស្រេចចិត្ត)</label>
+            <input type="file" id="ad-image" accept="image/*">
+        </div>
+        <button onclick="createAd()">បង្កើតផ្ទាំងពាណិជ្ជកម្ម</button>
+        <div id="ad-msg"></div>
+    </div>
+
+    <!-- 4. AI PROXY (GEMINI) -->
+    <div class="section">
+        <h2>សួរឆ្លើយជាមួយ AI (Gemini Proxy)</h2>
+        <div class="form-group">
+            <label>សំណួររបស់អ្នកទៅកាន់ AI</label>
+            <input type="text" id="ai-prompt" placeholder="តើមានអ្វីឱ្យខ្ញុំជួយទេ?">
+        </div>
+        <button onclick="askAI()">សួរ AI</button>
+        <div id="ai-msg"></div>
+        <h4>ចម្លើយពី AI៖</h4>
+        <div class="ai-box" id="ai-response">គ្មានទិន្នន័យ...</div>
+    </div>
+</div>
+
+<script>
+const API_URL = "http://localhost:3000/api"; // កែប្រែទៅតាម Server IP របស់អ្នក
+let token = localStorage.getItem("vidkh_token") || "";
+
+// មុខងារជំនួយសម្រាប់ការហៅទៅ API
+async function apiFetch(endpoint, method = "GET", body = null) {
+    const headers = { "Content-Type": "application/json" };
+    if (token) headers["Authorization"] = `Bearer ${token}`;
+    
+    const config = { method, headers };
+    if (body && method === "POST") config.body = JSON.stringify(body);
+    
+    const res = await fetch(`${API_URL}${endpoint}`, config);
+    if (res.status === 204) return null;
+    const data = await res.json();
+    if (!res.ok) throw new Error(data.error || "មានបញ្ហាខុសបច្ចេកទេស");
+    return data;
+}
+
+// មុខងារបំប្លែង File ទៅជា Base64
+const fileToBase64 = file => new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.readAsDataURL(file);
+    reader.onload = () => resolve(reader.result);
+    reader.onerror = error => reject(error);
+});
+
+// --- AUTH FUNCTIONS ---
+async function checkMe() {
+    if (!token) return toggleAuthView(false);
+    try {
+        const data = await apiFetch("/me");
+        document.getElementById("profile-name").innerText = data.user.name;
+        document.getElementById("profile-coins").innerText = data.user.coins;
+        toggleAuthView(true);
+    } catch (e) {
+        logout();
+    }
+}
+
+function toggleAuthView(isLoggedIn) {
+    document.getElementById("auth-forms").style.display = isLoggedIn ? "none" : "block";
+    document.getElementById("user-profile").style.display = isLoggedIn ? "block" : "none";
+}
+
+async function handleAuth(type) {
+    const name = document.getElementById("username").value;
+    const password = document.getElementById("password").value;
+    const msgDiv = document.getElementById("auth-msg");
+    try {
+        const data = await apiFetch(`/${type}`, "POST", { name, password });
+        token = data.token;
+        localStorage.setItem("vidkh_token", token);
+        msgDiv.innerHTML = `<span class="success">ជោគជ័យ!</span>`;
+        checkMe();
+    } catch (e) {
+        msgDiv.innerHTML = `<span class="error">${e.message}</span>`;
+    }
+}
+
+function logout() {
+    token = "";
+    localStorage.removeItem("vidkh_token");
+    toggleAuthView(false);
+}
+
+// --- STORE FUNCTIONS ---
+async function uploadApp() {
+    const name = document.getElementById("app-name").value;
+    const apkFile = document.getElementById("app-file").files[0];
+    const photoFiles = document.getElementById("app-photos").files;
+    const msgDiv = document.getElementById("store-msg");
+
+    if (!name || !apkFile || photoFiles.length !== 3) {
+        msgDiv.innerHTML = `<span class="error">សូមបំពេញឈ្មោះ, ឯកសារ APK និងជ្រើសរើសរូបថតគំរូឲ្យគ្រប់ ៣សន្លឹក</span>`;
+        return;
+    }
+
+    try {
+        msgDiv.innerText = "កំពុងបំប្លែងទិន្នន័យ និងបង្ហោះ...";
+        const apkBase64Full = await fileToBase64(apkFile);
+        const apk = apkBase64Full.split(",")[1]; // យកតែផ្នែក base64 data bytes
+        
+        const photos = [];
+        for (let i = 0; i < photoFiles.length; i++) {
+            photos.push(await fileToBase64(photoFiles[i]));
+        }
+
+        const data = await apiFetch("/store", "POST", { name, apk, photos });
+        msgDiv.innerHTML = `<span class="success">បង្ហោះកម្មវិធីបានជោគជ័យ! សល់កាក់: ${data.user.coins}</span>`;
+        checkMe();
+        loadApps();
+    } catch (e) {
+        msgDiv.innerHTML = `<span class="error">${e.message}</span>`;
+    }
+}
+
+async function loadApps() {
+    const listDiv = document.getElementById("apps-list");
+    try {
+        const data = await apiFetch("/store");
+        listDiv.innerHTML = "";
+        data.apps.forEach(app => {
+            listDiv.innerHTML += `
+                <div class="card">
+                    <h4>${app.name}</h4>
+                    <p>អ្នកដាក់: ${app.owner_name}</p>
+                    <p>ទំហំ: ${(app.size/1024/1024).toFixed(2)} MB</p>
+                    <p>ទាញយក: ${app.downloads} ដង</p>
+                    <div style="margin:5px 0;">
+                        <img src="${API_URL}/store/photo?id=${app.id}&i=0" onerror="this.src='https://placeholder.com'">
+                    </div>
+                    <button onclick="window.open('${API_URL}/store/download?id=${app.id}')">ទាញយក APK</button>
+                </div>
+            `;
+        });
+    } catch (e) { console.error(e); }
+}
+
+// --- ADS FUNCTIONS ---
+async function createAd() {
+    const text = document.getElementById("ad-text").value;
+    const imgFile = document.getElementById("ad-image").files[0];
+    const msgDiv = document.getElementById("ad-msg");
+    
+    try {
+        let image = null;
+        if (imgFile) image = await fileToBase64(imgFile);
+        
