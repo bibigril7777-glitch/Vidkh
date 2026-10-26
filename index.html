@@ -596,7 +596,7 @@ function you(){
   else if(V.tab==="pl")body=plView();
   else if(V.tab==="docs")body=docsList(u);
  else body=u.subs.length?u.subs.map(c=>`<div class="cm">${av(c)}<b style="flex:1">${esc(c)}</b><button class="sub on" data-a="sub" data-i="${esc(c)}">បានតាមដាន</button></div>`).join("")+`<h3 style="margin:16px 0 10px">វីដេអូថ្មីៗ</h3>`+grid(all().filter(v=>u.subs.includes(v.ch)&&v.k!=="photo"),""):`<div class="empty">អ្នកមិនទាន់បានតាមដានឆានែលណាទេ។</div>`;
- return `<div class="chead">${av(S.user.name,S.user.pic,"big")}<div><h2>${esc(S.user.name)}${S.user.handle&&S.user.pic?'<span title="គណនីពេញលេញ" style="color:#1d9bf0;margin-left:6px;font-size:18px">✔</span>':""}</h2><div class="s">@${esc(S.user.handle||"ដាក់ @username")}</div><div class="s">${esc(S.user.email||"គណនីក្នុងឧបករណ៍")}</div><div class="act" style="margin-top:8px"><button class="pill" data-a="acc">✏️ កែសម្រួលគណនី</button><button class="pill" data-a="vpsf">📦 ឯកសារ VPS</button><button class="pill on" data-a="up">＋ បង្ហោះ</button><button class="pill" data-a="settings">⚙ ការកំណត់</button><button class="pill" data-a="robot">🤖 Robot សំឡេង</button><button class="pill" data-a="guide">🤖 ជំនួយការ</button><button class="pill on" data-a="newdoc">✍ សរសេរប្លុក/CV</button><button class="pill" data-p="wallet">🪙 រង្វាន់ និងហាង</button><button class="pill" data-p="security">🛡 សុវត្ថិភាព</button><button class="pill" data-a="out">ចាកចេញ</button></div></div></div>
+ return `<div class="chead">${av(S.user.name,S.user.pic,"big")}<div><h2>${esc(S.user.name)}${S.user.handle&&S.user.pic?'<span title="គណនីពេញលេញ" style="color:#1d9bf0;margin-left:6px;font-size:18px">✔</span>':""}</h2><div class="s">@${esc(S.user.handle||"ដាក់ @username")}</div><div class="s">${esc(S.user.email||"គណនីក្នុងឧបករណ៍")}</div><div class="act" style="margin-top:8px"><button class="pill" data-a="acc">✏️ កែសម្រួលគណនី</button><button class="pill" data-a="vpsf">📦 ឯកសារ VPS</button><button class="pill" data-a="rdo">📻 វិទ្យុខ្មែរ</button><button class="pill on" data-a="up">＋ បង្ហោះ</button><button class="pill" data-a="settings">⚙ ការកំណត់</button><button class="pill" data-a="robot">🤖 Robot សំឡេង</button><button class="pill" data-a="guide">🤖 ជំនួយការ</button><button class="pill on" data-a="newdoc">✍ សរសេរប្លុក/CV</button><button class="pill" data-p="wallet">🪙 រង្វាន់ និងហាង</button><button class="pill" data-p="security">🛡 សុវត្ថិភាព</button><button class="pill" data-a="out">ចាកចេញ</button></div></div></div>
  <div class="tabs">${TABS.map(([k,n])=>`<button class="pill ${V.tab===k?"on":""}" data-t="${k}">${n}</button>`).join("")}</div>`+body;
 }
 function render(){
@@ -1985,6 +1985,7 @@ document.addEventListener("click",e=>{
  else if(a==="hgame")hgOpen();
  else if(a==="hgx")hgClose();
  else if(a==="vpsf")openVps();
+ else if(a==="rdo")openRadio();
  else if(a==="lclaim"){
   if(!need())return;const l=lmis();
   if(l.sec<LGOAL||l.c===today())return;
@@ -2850,6 +2851,45 @@ document.addEventListener("change",e=>{
  if(e.target.id!=="ff"||!e.target.files)return;
  if([...e.target.files].some(f=>!f.type.startsWith("image/"))){e.stopImmediatePropagation();e.target.value="";toast("សារបង្ហោះអាចមានរូបថត ឬអត្ថបទប៉ុណ្ណោះ")}
 },true);
+
+/* ===== វិទ្យុខ្មែរ (ស្ទ្រីមដែលអ្នកបញ្ចូលខ្លួនឯង) ===== */
+const RA=new Audio();RA.preload="none";
+let RA_CUR=null;
+function radioList(){return S.radio=S.radio||[]}
+function radioBtns(){
+ const L=radioList();
+ return L.length?L.map((r,i)=>`<div class="row" style="margin:6px 0"><b style="flex:1">${RA_CUR===i&&!RA.paused?"🔊 ":""}${esc(r.n)}</b><div class="act"><button class="pill on" data-rp="${i}">${RA_CUR===i&&!RA.paused?"⏸ ផ្អាក":"▶ ចាក់"}</button><button class="pill" data-rd="${i}">លុប</button></div></div>`).join("")
+  :'<p class="s">មិនទាន់មានវិទ្យុ។ បញ្ចូលឈ្មោះ និង URL ស្ទ្រីមខាងក្រោម។</p>';
+}
+function openRadio(){
+ let d=$("#rdo");
+ if(!d){d=document.createElement("dialog");d.id="rdo";document.body.appendChild(d);
+  d.addEventListener("click",e=>{
+   const p=e.target.closest("[data-rp]"),r=e.target.closest("[data-rd]");
+   if(p){const i=+p.dataset.rp,L=radioList(),st=L[i];if(!st)return;
+    if(RA_CUR===i&&!RA.paused){RA.pause()}else{RA_CUR=i;RA.src=st.u;RA.play().catch(()=>toast("ចាក់មិនបាន: ស្ទ្រីមនេះមិនអាចប្រើបាន"))}
+    refresh();return}
+   if(r){const i=+r.dataset.rd;if(RA_CUR===i){RA.pause();RA_CUR=null}radioList().splice(i,1);save();refresh();return}
+   if(e.target.id==="rda"){
+    const n=($("#rdn").value||"").trim(),u=($("#rdu").value||"").trim();
+    if(!n){toast("សូមដាក់ឈ្មោះវិទ្យុ");return}
+    if(!/^https:\/\//.test(u)){toast("URL ត្រូវចាប់ផ្តើមដោយ https://");return}
+    radioList().push({n,u});save();refresh();return}
+   if(e.target.id==="rdx")d.close();
+  });
+ }
+ const refresh=()=>{d.innerHTML=`<h3>📻 វិទ្យុខ្មែរ</h3><div class="col">${radioBtns()}</div>
+  <label>ឈ្មោះវិទ្យុ</label><input id="rdn" maxlength="40">
+  <label>URL ស្ទ្រីម (https://...mp3, .aac ឬ .m3u8)</label><input id="rdu" placeholder="https://">
+  <p class="s" style="font-size:12px">ចំណាំ៖ .m3u8 (HLS) ដំណើរការលើ Safari និង Android ភាគច្រើន។ ស្ទ្រីមត្រូវមានសិទ្ធិប្រើ។</p>
+  <div class="bar"><button class="pill" id="rdx">បិទ</button><button class="pill on" id="rda">＋ បន្ថែម</button></div>`};
+ RA_REFRESH=()=>{if(d.open)refresh()};
+ refresh();
+ d.showModal();
+}
+let RA_REFRESH=null;
+RA.addEventListener("pause",()=>{if(RA_REFRESH)RA_REFRESH()});
+RA.addEventListener("play",()=>{if(RA_REFRESH)RA_REFRESH()});
 </script>
 </body>
 </html>
