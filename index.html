@@ -1,67 +1,72 @@
-
 <!DOCTYPE html>
 <html lang="km">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
-  <meta name="theme-color" content="#17251a">
-  <title>Cambodia Special Forces 3D</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#101827">
+  <title>កម្មវិធីបញ្ចូលសំឡេងវីដេអូ</title>
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <canvas id="game"></canvas>
-
-  <div id="hud">
-    <header>
-      <div class="brand">🇰🇭 CAMBODIA SPECIAL FORCES</div>
-      <div class="stats">
-        HP: <b id="hp">100</b>
-        <span>គ្រាប់: <b id="ammo">12/60</b></span>
-        <span>សត្រូវ: <b id="enemyCount">5</b></span>
-      </div>
-    </header>
-
-    <div id="mission">បេសកកម្ម៖ កម្ចាត់សត្រូវទាំងអស់</div>
-    <div id="crosshair">+</div>
-    <div id="damage"></div>
-
-    <section id="intro" class="overlay">
-      <div class="panel">
-        <div class="flag">🇰🇭</div>
-        <h1>CAMBODIA<br>SPECIAL FORCES</h1>
-        <p>3D FPS • OFFLINE • VS AI</p>
-        <p>ចូលរួមបេសកកម្មកងកម្លាំងពិសេសកម្ពុជា</p>
-        <button id="start">ចាប់ផ្ដើមលេង</button>
-      </div>
+  <header>
+    <div class="brand">🎙️ ស្ទូឌីយោសំឡេង</div>
+    <span class="tag">VIDEO VOICE STUDIO</span>
+  </header>
+  <main>
+    <section class="intro">
+      <h1>បញ្ចូលសំឡេងទៅក្នុងវីដេអូ</h1>
+      <p>ជ្រើសរើសវីដេអូ បន្ថែមសំឡេង ឬថតសំឡេងផ្ទាល់ រួចនាំចេញជាវីដេអូថ្មី។</p>
     </section>
 
-    <section id="result" class="overlay hidden">
-      <div class="panel">
-        <h1 id="resultTitle">MISSION COMPLETE</h1>
-        <p id="resultText">បេសកកម្មបានបញ្ចប់</p>
-        <button id="restart">លេងម្ដងទៀត</button>
-      </div>
+    <section class="panel">
+      <h2>១. ជ្រើសរើសវីដេអូ</h2>
+      <label class="upload" for="videoInput"><span>📁</span><b>ជ្រើសរើសឯកសារវីដេអូ</b><small>MP4, WebM និងទម្រង់ដែលកម្មវិធីរុករកគាំទ្រ</small></label>
+      <input id="videoInput" type="file" accept="video/*">
+      <video id="preview" controls playsinline></video>
+      <div id="videoName" class="filename">មិនទាន់មានវីដេអូទេ</div>
     </section>
 
-    <div id="joystick">
-      <button id="forward">▲</button>
-      <div>
-        <button id="left">◀</button>
-        <button id="backward">▼</button>
-        <button id="right">▶</button>
+    <section class="panel">
+      <h2>២. បន្ថែមសំឡេង</h2>
+      <div class="two">
+        <label class="upload compact" for="audioInput"><span>🎵</span><b>បញ្ចូលឯកសារសំឡេង</b><small>MP3, WAV, M4A និងផ្សេងៗ</small></label>
+        <input id="audioInput" type="file" accept="audio/*">
+        <div class="recorder">
+          <div class="mic">🎤</div>
+          <b>ថតសំឡេងផ្ទាល់</b>
+          <small id="recordStatus">ចុចប៊ូតុងដើម្បីចាប់ផ្ដើមថត</small>
+          <button id="recordBtn" class="secondary">● ចាប់ផ្ដើមថត</button>
+        </div>
       </div>
-    </div>
+      <div id="audioName" class="filename">មិនទាន់មានសំឡេងទេ</div>
+      <audio id="audioPreview" controls></audio>
+    </section>
 
-    <div id="actions">
-      <button id="reload">↻<small>បញ្ចូលគ្រាប់</small></button>
-      <button id="jump">↑<small>លោត</small></button>
-      <button id="shoot">●<small>បាញ់</small></button>
-    </div>
+    <section class="panel">
+      <h2>៣. កំណត់សំឡេង</h2>
+      <div class="setting">
+        <label for="delay">ពេលចាប់ផ្ដើមសំឡេង <strong id="delayValue">0 វិនាទី</strong></label>
+        <input id="delay" type="range" min="0" max="60" step="0.5" value="0">
+      </div>
+      <div class="setting">
+        <label for="volume">កម្រិតសំឡេងថ្មី <strong id="volumeValue">100%</strong></label>
+        <input id="volume" type="range" min="0" max="2" step="0.05" value="1">
+      </div>
+      <div class="setting">
+        <label class="check"><input id="muteOriginal" type="checkbox" checked> បិទសំឡេងដើមរបស់វីដេអូ</label>
+      </div>
+      <p class="hint">ចំណាំ៖ សំឡេងថ្មីនឹងចាប់ផ្ដើមតាមចំនួនវិនាទីដែលអ្នកកំណត់។</p>
+    </section>
 
-    <div id="hint">អូសលើផ្ទៃហ្គេម ដើម្បីបង្វិលកាមេរ៉ា</div>
-    <div id="toast"></div>
-  </div>
-
+    <section class="panel">
+      <h2>៤. នាំចេញវីដេអូ</h2>
+      <button id="exportBtn" class="primary" disabled>⬇️ បង្កើតវីដេអូដែលបានបញ្ចូលសំឡេង</button>
+      <div id="progressWrap" hidden><div class="progress"><div id="progressBar"></div></div><p id="progressText">កំពុងដំណើរការ...</p></div>
+      <a id="downloadLink" hidden download="video-with-voice.webm">⬇️ ទាញយកវីដេអូថ្មី</a>
+      <p class="hint">ការនាំចេញប្រើមុខងារថតមេឌៀរបស់កម្មវិធីរុករក ហើយភាគច្រើននឹងរក្សាទុកជា WebM។ សូមទុកទំព័រនេះបើករហូតដល់ការនាំចេញចប់។</p>
+    </section>
+  </main>
+  <footer>ដំណើរការក្នុងឧបករណ៍របស់អ្នក • មិនចាំបាច់ផ្ញើឯកសារទៅម៉ាស៊ីនមេ</footer>
   <script src="game.js"></script>
 </body>
 </html>
