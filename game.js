@@ -1,84 +1,164 @@
-const $=id=>document.getElementById(id);
-const video=$('preview'), audio=$('audioPreview');
-let videoURL=null,audioURL=null,recordedBlob=null,recorder=null,stream=null,recordChunks=[];
-function setFileName(el,file){el.textContent=file?file.name:'មិនទាន់មានឯកសារទេ'}
-function updateReady(){$('exportBtn').disabled=!(video.src&&audio.src)}
-$('videoInput').addEventListener('change',e=>{
- const f=e.target.files[0];if(!f)return;
- if(videoURL)URL.revokeObjectURL(videoURL);
- videoURL=URL.createObjectURL(f);video.src=videoURL;video.style.display='block';
- $('videoName').textContent=f.name;updateReady();$('downloadLink').hidden=true;
+const $ = id => document.getElementById(id);
+let voiceBlob = null, voiceUrl = null, videoUrl = null, exportedUrl = null;
+
+$("toggleKey").addEventListener("click", () => {
+  const field = $("apiKey");
+  field.type = field.type === "password" ? "text" : "password";
+  $("toggleKey").textContent = field.type === "password" ? "បង្ហាញ" : "លាក់";
 });
-function loadAudio(blob,name){
- if(audioURL)URL.revokeObjectURL(audioURL);
- audioURL=URL.createObjectURL(blob);audio.src=audioURL;audio.style.display='block';
- $('audioName').textContent=name;updateReady();$('downloadLink').hidden=true;
-}
-$('audioInput').addEventListener('change',e=>{const f=e.target.files[0];if(f)loadAudio(f,f.name)});
-$('delay').addEventListener('input',e=>$('delayValue').textContent=`${e.target.value} វិនាទី`);
-$('volume').addEventListener('input',e=>$('volumeValue').textContent=`${Math.round(Number(e.target.value)*100)}%`);
-$('recordBtn').addEventListener('click',async()=>{
- if(recorder&&recorder.state==='recording'){recorder.stop();$('recordBtn').textContent='● ចាប់ផ្ដើមថត';return}
- try{
-  stream=await navigator.mediaDevices.getUserMedia({audio:true});recordChunks=[];
-  const mime=MediaRecorder.isTypeSupported('audio/webm;codecs=opus')?'audio/webm;codecs=opus':'audio/webm';
-  recorder=new MediaRecorder(stream,{mimeType:mime});
-  recorder.ondataavailable=e=>{if(e.data.size)recordChunks.push(e.data)};
-  recorder.onstop=()=>{recordedBlob=new Blob(recordChunks,{type:recorder.mimeType||'audio/webm'});loadAudio(recordedBlob,'សំឡេងដែលបានថត.webm');stream.getTracks().forEach(t=>t.stop());$('recordStatus').textContent='ថតរួចរាល់';};
-  recorder.start();$('recordBtn').textContent='■ បញ្ឈប់ការថត';$('recordStatus').textContent='កំពុងថតសំឡេង...';
- }catch(err){$('recordStatus').textContent='មិនអាចប្រើមីក្រូហ្វូនបានទេ។ សូមអនុញ្ញាតការប្រើប្រាស់មីក្រូហ្វូន។'}
+
+$("videoFile").addEventListener("change", e => {
+  const file = e.target.files[0];
+  if (!file) return;
+  if (videoUrl) URL.revokeObjectURL(videoUrl);
+  videoUrl = URL.createObjectURL(file);
+  $("video").src = videoUrl;
+  $("video").load();
+  $("status").textContent = "បានបញ្ចូលវីដេអូរួចរាល់។";
 });
-$('exportBtn').addEventListener('click',async()=>{
- if(!video.src||!audio.src)return;
- const btn=$('exportBtn'),wrap=$('progressWrap'),bar=$('progressBar'),txt=$('progressText'),link=$('downloadLink');
- btn.disabled=true;link.hidden=true;wrap.hidden=false;bar.style.width='0%';
- let audioCtx,sourceAudio,videoStream,combined,dest,raf=0;
- try{
-  // Start both tracks at a deterministic point.
-  video.pause();video.currentTime=0;
-  await new Promise((resolve,reject)=>{if(video.readyState>=2)resolve();else{video.onloadeddata=resolve;video.onerror=reject}});
-  const canvas=document.createElement('canvas');
-  const w=video.videoWidth||1280,h=video.videoHeight||720;
-  const scale=Math.min(1,1280/w);canvas.width=Math.round(w*scale);canvas.height=Math.round(h*scale);
-  const ctx=canvas.getContext('2d');
-  audioCtx=new(window.AudioContext||window.webkitAudioContext)();
-  sourceAudio=audioCtx.createMediaElementSource(audio);
-  const voiceGain=audioCtx.createGain();voiceGain.gain.value=Number($('volume').value);
-  sourceAudio.connect(voiceGain);
-  dest=audioCtx.createMediaStreamDestination();voiceGain.connect(dest);
-  if(!$('muteOriginal').checked&&video.captureStream){
-   const original=video.captureStream();const originalAudio=original.getAudioTracks();
-   // Original audio is optional and routed separately.
-   if(originalAudio.length){const src=audioCtx.createMediaStreamSource(new MediaStream(originalAudio));src.connect(audioCtx.destination);src.connect(dest)}
+
+$("generateBtn").addEventListener("click", async () => {
+  const key = $("apiKey").value.trim();
+  const input = $("voiceText").value.trim();
+  if (!key) return setStatus("សូមបញ្ចូល OpenAI API Key ជាមុន។", true);
+  if (!input) return setStatus("សូមសរសេរអត្ថបទដែលចង់ឱ្យ AI អាន។", true);
+  if (input.length > 4096) return setStatus("អត្ថបទវែងពេក។ សូមកាត់ឱ្យតិចជាង 4096 តួអក្សរ។", true);
+
+  const btn = $("generateBtn");
+  btn.disabled = true;
+  setStatus("កំពុងបង្កើតសំឡេង… សូមរង់ចាំ។");
+  try {
+    const response = await fetch("https://api.openai.com/v1/audio/speech", {
+      method: "POST",
+      headers: {
+        "Authorization": `Bearer ${key}`,
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        model: "gpt-4o-mini-tts",
+        voice: $("voice").value,
+        input,
+        instructions: $("style").value,
+        response_format: "mp3"
+      })
+    });
+    if (!response.ok) {
+      let message = `OpenAI API Error (${response.status})`;
+      try { const data = await response.json(); message = data.error?.message || message; } catch {}
+      throw new Error(message);
+    }
+    voiceBlob = await response.blob();
+    if (voiceUrl) URL.revokeObjectURL(voiceUrl);
+    voiceUrl = URL.createObjectURL(voiceBlob);
+    $("audio").src = voiceUrl;
+    $("audioDownload").href = voiceUrl;
+    $("audioDownload").hidden = false;
+    setStatus("សំឡេង AI បានបង្កើតរួចរាល់! អាចស្ដាប់ ឬទាញយកបាន។");
+  } catch (err) {
+    const msg = err.message || String(err);
+    if (msg.includes("Failed to fetch") || msg.includes("NetworkError")) {
+      setStatus("មិនអាចភ្ជាប់ API ពី browser បានទេ (អាចជា CORS)។ GitHub Pages តែមួយមុខមិនអាចដោះស្រាយបញ្ហានេះបានទេ—ត្រូវប្រើ backend។", true);
+    } else {
+      setStatus(msg, true);
+    }
+  } finally {
+    btn.disabled = false;
   }
-  videoStream=canvas.captureStream(30);
-  combined=new MediaStream([...videoStream.getVideoTracks(),...dest.stream.getAudioTracks()]);
-  const mime=['video/webm;codecs=vp9,opus','video/webm;codecs=vp8,opus','video/webm'].find(t=>MediaRecorder.isTypeSupported(t));
-  if(!mime)throw new Error('កម្មវិធីរុករកនេះមិនគាំទ្រការនាំចេញវីដេអូ WebM ទេ។');
-  const chunks=[],out=new MediaRecorder(combined,{mimeType:mime,videoBitsPerSecond:2500000});
-  out.ondataavailable=e=>{if(e.data.size)chunks.push(e.data)};
-  const finished=new Promise(resolve=>out.onstop=()=>resolve(new Blob(chunks,{type:mime})));
-  const delay=Number($('delay').value);
-  audio.pause();audio.currentTime=0;video.currentTime=0;
-  await audioCtx.resume();
-  out.start(500);video.play();
-  const draw=()=>{ctx.drawImage(video,0,0,canvas.width,canvas.height);if(!video.paused&&!video.ended)raf=requestAnimationFrame(draw)};
-  draw();
-  const start=performance.now();
-  const startVoice=()=>{audio.currentTime=0;audio.play().catch(()=>{});};
-  const delayTimer=setTimeout(startVoice,delay*1000);
-  const progressTimer=setInterval(()=>{const p=Math.min(99,(video.currentTime/(video.duration||1))*100);bar.style.width=p+'%';txt.textContent=`កំពុងបង្កើត... ${Math.round(p)}%`;},300);
-  await new Promise(resolve=>{video.onended=resolve;video.onerror=resolve});
-  clearTimeout(delayTimer);clearInterval(progressTimer);cancelAnimationFrame(raf);
-  out.stop();const blob=await finished;
-  video.pause();audio.pause();video.currentTime=0;audio.currentTime=0;
-  const url=URL.createObjectURL(blob);link.href=url;link.hidden=false;
-  link.download='video-with-voice.webm';bar.style.width='100%';txt.textContent='រួចរាល់! ចុចខាងលើដើម្បីទាញយក។';
- }catch(err){txt.textContent='មានបញ្ហា៖ '+(err.message||'មិនអាចបង្កើតវីដេអូបានទេ');}
- finally{
-  cancelAnimationFrame(raf);if(audioCtx)await audioCtx.close().catch(()=>{});
-  if(videoStream)videoStream.getTracks().forEach(t=>t.stop());
-  if(combined)combined.getTracks().forEach(t=>t.stop());
-  btn.disabled=false;
- }
 });
+
+$("exportBtn").addEventListener("click", async () => {
+  const video = $("video");
+  if (!video.src) return setStatus("សូមបញ្ចូលវីដេអូជាមុន។", true);
+  if (!voiceBlob || !voiceUrl) return setStatus("សូមបង្កើតសំឡេង AI ជាមុន។", true);
+  if (!("MediaRecorder" in window) || !video.captureStream) {
+    return setStatus("Browser នេះមិនគាំទ្រ Export។ សូមប្រើ Chrome ឬ Edge កំណែថ្មី។", true);
+  }
+
+  const btn = $("exportBtn");
+  btn.disabled = true;
+  try {
+    video.pause();
+    video.currentTime = 0;
+    await waitForMedia(video);
+    const audio = $("audio");
+    audio.pause();
+    audio.currentTime = 0;
+
+    const canvas = document.createElement("canvas");
+    const width = video.videoWidth || 1280;
+    const height = video.videoHeight || 720;
+    canvas.width = width; canvas.height = height;
+    const ctx = canvas.getContext("2d");
+    const canvasStream = canvas.captureStream(30);
+    const videoStream = video.captureStream();
+    const AudioContextClass = window.AudioContext || window.webkitAudioContext;
+    const audioCtx = new AudioContextClass();
+    await audioCtx.resume();
+    const destination = audioCtx.createMediaStreamDestination();
+
+    const voiceSource = audioCtx.createMediaElementSource(audio);
+    voiceSource.connect(destination);
+    voiceSource.connect(audioCtx.destination);
+
+    if (!$("muteOriginal").checked) {
+      const originalTracks = videoStream.getAudioTracks();
+      if (originalTracks.length) {
+        const originalStream = new MediaStream(originalTracks);
+        const originalSource = audioCtx.createMediaStreamSource(originalStream);
+        originalSource.connect(destination);
+      }
+    }
+
+    const mixedStream = new MediaStream([
+      ...canvasStream.getVideoTracks(),
+      ...destination.stream.getAudioTracks()
+    ]);
+    const mime = MediaRecorder.isTypeSupported("video/webm;codecs=vp9,opus")
+      ? "video/webm;codecs=vp9,opus" : "video/webm";
+    const recorder = new MediaRecorder(mixedStream, { mimeType: mime });
+    const chunks = [];
+    recorder.ondataavailable = e => { if (e.data.size) chunks.push(e.data); };
+    const stopped = new Promise((resolve, reject) => {
+      recorder.onstop = resolve;
+      recorder.onerror = e => reject(e.error || new Error("Export error"));
+    });
+
+    function drawFrame() {
+      if (video.readyState >= 2) ctx.drawImage(video, 0, 0, width, height);
+      if (!video.paused && !video.ended) requestAnimationFrame(drawFrame);
+    }
+
+    setStatus("កំពុង Export វីដេអូ… សូមកុំបិទទំព័រ។");
+    recorder.start(250);
+    drawFrame();
+    await video.play();
+    await audio.play().catch(() => {});
+    await new Promise(resolve => video.addEventListener("ended", resolve, { once: true }));
+    recorder.stop();
+    await stopped;
+
+    const result = new Blob(chunks, { type: "video/webm" });
+    if (exportedUrl) URL.revokeObjectURL(exportedUrl);
+    exportedUrl = URL.createObjectURL(result);
+    $("videoDownload").href = exportedUrl;
+    $("videoDownload").hidden = false;
+    setStatus("Export រួចរាល់! ចុច «ទាញយកវីដេអូ WebM»។");
+    await audioCtx.close();
+  } catch (err) {
+    setStatus("Export មិនបានសម្រេច៖ " + (err.message || err), true);
+  } finally {
+    btn.disabled = false;
+  }
+});
+
+function setStatus(message, error = false) {
+  $("status").textContent = message;
+  $("status").style.color = error ? "#ff9e9e" : "#a9e5c0";
+}
+function waitForMedia(media) {
+  if (media.readyState >= 2) return Promise.resolve();
+  return new Promise((resolve, reject) => {
+    media.addEventListener("loadeddata", resolve, { once: true });
+    media.addEventListener("error", () => reject(new Error("មិនអាចអានវីដេអូនេះបានទេ។")), { once: true });
+  });
+}
